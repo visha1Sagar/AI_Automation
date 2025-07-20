@@ -1,0 +1,667 @@
+{
+  "name": "AI lead generation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lead Generation",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Who do you want to target?",
+              "placeholder": "e.g., CEOs of AI startups in Berlin",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Do you want to send linkedin messages automatically?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Yes"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "What do you want to say or offer?",
+              "placeholder": "e.g., Invite them to my SaaS beta"
+            },
+            {
+              "fieldLabel": "Any suggestion for the tone of message?",
+              "placeholder": "keep it semi-formal"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -560,
+        32
+      ],
+      "id": "96fe4117-e46e-4b20-9d5a-35b30efdb467",
+      "name": "Data collection - form",
+      "webhookId": "0f4690dc-db06-444e-b14a-12f67f8d6474"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"search_query\": \"site:linkedin.com/in \\\"marketing head\\\" \\\"ecommerce startup\\\" Berlin\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -128,
+        192
+      ],
+      "id": "3f8a66d3-dbbf-4c53-915f-26075f561193",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "q": "={{ $json.output.search_query }}",
+        "location": "=",
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApi",
+      "typeVersion": 1,
+      "position": [
+        0,
+        32
+      ],
+      "id": "247f5c53-ce03-450c-b447-9fba2032965a",
+      "name": "Google search",
+      "credentials": {
+        "serpApi": {
+          "id": "annWYJ92VKQy0I0V",
+          "name": "SerpApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"Linkedin_search_query\" :\"https://www.linkedin.com/search/results/all/?keywords=machine%20learning%20engineer&origin=GLOBAL_SEARCH_HEADER&sid=dL0\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        672
+      ],
+      "id": "2b0a36d4-9b9b-48f9-893d-401bf774417d",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "content": "## using google\n",
+        "height": 368,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -400,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "50b7c170-50af-4f91-9d62-f87c3ec8d61e",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## using browserflow",
+        "height": 432,
+        "width": 880
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -560,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "ae2ea46b-b664-43c8-88ac-7452f91a98fa",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## OR",
+        "height": 80,
+        "width": 150,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -208,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "3511b98d-c86b-4daf-a12a-59c03de9473a",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert LinkedIn Search Query Generator. Your primary goal is to translate any user request describing a target professional audience into a precise, effective, and fully URL-encoded LinkedIn search URL.\n\nYou MUST generate a complete LinkedIn search URL that strictly adheres to LinkedIn's URL parameter format.\n\n**Instructions for Building the URL:**\n-   **Base URL:** Always start with `https://www.linkedin.com/search/results/all/`\n-   **Keywords (`keywords` parameter):**\n    * Identify the core roles, skills, industries, or job titles from the user's request.\n    * Use double quotes (`%22`) for exact phrases (e.g., `\"Project Manager\"` becomes `%22Project%20Manager%22`).\n    * Combine multiple keywords or concepts using ` OR ` for alternatives (e.g., `\"CEO\" OR \"Founder\"` becomes `%22CEO%22%20OR%20%22Founder%22`).\n    * Combine different concepts with ` AND ` (e.g., `\"Marketing\" AND \"SaaS\"` becomes `%22Marketing%22%20AND%20%22SaaS%22`).\n    * Ensure all spaces are `%20`.\n-   **Company Size (`f_CS` parameter - for \"small to medium companies\", \"startups\", \"enterprises\", etc.):**\n    * If the request mentions company size, use the `f_CS` parameter.\n    * Map descriptions to these `f_CS` values:\n        * 1-10 employees: `f_CS=1`\n        * 11-50 employees: `f_CS=2`\n        * 51-200 employees: `f_CS=3`\n        * 201-500 employees: `f_CS=4`\n        * 501-1000 employees: `f_CS=5`\n        * 1001-5000 employees: `f_CS=6`\n        * 5001-10,000 employees: `f_CS=7`\n        * 10,001+ employees: `f_CS=8`\n        * For common ranges like \"small to medium\", combine values (e.g., `f_CS=2%2C3%2C4` for 11-500 employees).\n    * Combine multiple `f_CS` values with URL-encoded commas (`%2C`).\n-   **Location (`f_L` parameter - if applicable):**\n    * If the user specifies a location (e.g., \"in London\", \"from USA\"), incorporate it into the `keywords` parameter for broader matching unless you have specific LinkedIn location ID knowledge. For simplicity, prioritize including location terms as keywords.\n-   **Default Parameters:** Always append `&origin=GLOBAL_SEARCH_HEADER` to the end of the URL. Do not include a `sid` parameter.\n\n**Desired Output Format (JSON):**\n\n```json\n{\n  \"linkedin_search_query\": \"YOUR_GENERATED_LINKEDIN_URL_HERE\"\n}\nUser Input:\n\"\"\"\n{{ $json['Who do you want to target?'] }}\n\"\"\"",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        432
+      ],
+      "id": "98715881-11d9-4177-913f-23ab05906194",
+      "name": "Search Query Generator"
+    },
+    {
+      "parameters": {
+        "operation": "scrapeProfilesFromSearch",
+        "searchMethod": "url",
+        "searchUrl": "={{ $json.output.Linkedin_search_query }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-browserflow.browserflow",
+      "typeVersion": 1,
+      "position": [
+        0,
+        432
+      ],
+      "id": "41d6cacb-dd19-4cb4-acef-59f0d9348300",
+      "name": "Scrape profiles",
+      "credentials": {
+        "browserflowApi": {
+          "id": "4ggbbPbHRCbvkl7V",
+          "name": "Browserflow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert lead generation assistant.\n\nGiven a user's answer to the question \"Who do you want to target?\", generate a concise and effective Google search query to find public LinkedIn profiles or company websites relevant to that audience.\n\nOutput format: \n{\n  \"search_query\": \"...\"  // A Google search query string\n  \n}\n\nRules:\n- Use keywords like \"site:linkedin.com/in\" or \"site:linkedin.com/company\" to restrict searches to LinkedIn.\n- Add filters such as location, job title, industry, etc., only if present in the user input.\n- Be specific and structured. Use quotes where needed.\n- Avoid unnecessary words or explanations.\n\nUser Input:\n\"\"\"\n{{ $json['Who do you want to target?'] }}\n\"\"\"\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        32
+      ],
+      "id": "d1fde644-ae7d-475c-a803-71e40db3fe16",
+      "name": "Search Query Generator - google"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        704,
+        16
+      ],
+      "id": "63c9f705-7375-4c96-9843-f8843d5f3a92",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n JavaScript Code Node\n// Input: SerpAPI search results\n// Output: Structured leads format\n\n// Get the input data (assuming it comes from previous node)\nconst inputData = $input.all();\n\n// Initialize the output structure\nconst leads = [];\n\n// Process each input item\ninputData.forEach(item => {\n  // Extract the search results data\n  const searchData = item.json;\n  \n  // Check if organic_results exists\n  if (searchData.organic_results && Array.isArray(searchData.organic_results)) {\n    \n    // Process each organic result\n    searchData.organic_results.forEach(result => {\n      \n      // Extract name from title (remove extra info after \" - \")\n      let name = result.title;\n      if (name.includes(' - ')) {\n        name = name.split(' - ')[0].trim();\n      }\n      \n      // Extract company from rich_snippet or title\n      let company = '';\n      let title = '';\n      \n      // Try to get company and title from rich_snippet extensions\n      if (result.rich_snippet && result.rich_snippet.top && result.rich_snippet.top.extensions) {\n        const extensions = result.rich_snippet.top.extensions;\n        if (extensions.length >= 3) {\n          // Usually format is [Location, Title, Company]\n          title = extensions[1] || '';\n          company = extensions[2] || '';\n        }\n      }\n      \n      // If not found in rich_snippet, try to extract from snippet or title\n      if (!company || !title) {\n        // Try to extract from snippet\n        const snippet = result.snippet || '';\n        \n        // Look for company patterns in snippet\n        if (snippet.includes('Experience') && snippet.includes('Graphic')) {\n          const parts = snippet.split('Graphic');\n          if (parts.length > 1) {\n            const afterGraphic = parts[1].trim();\n            const lines = afterGraphic.split('.');\n            if (lines.length > 0) {\n              title = lines[0].trim();\n            }\n            if (lines.length > 1) {\n              company = lines[1].trim();\n            }\n          }\n        }\n        \n        // Try to extract from title if still not found\n        if (!title && result.title.includes(' - ')) {\n          const titleParts = result.title.split(' - ');\n          if (titleParts.length >= 2) {\n            title = titleParts[1].trim();\n          }\n          if (titleParts.length >= 3) {\n            company = titleParts[2].trim();\n          }\n        }\n      }\n      \n      // Clean up extracted data\n      name = name.replace(/[^a-zA-Z\\s.-]/g, '').trim();\n      title = title.replace(/[^a-zA-Z\\s&@(),-]/g, '').trim();\n      company = company.replace(/[^a-zA-Z\\s&@(),-]/g, '').trim();\n      \n      // Create lead object\n      const lead = {\n        linkedin_url: result.link || '',\n        name: name || '',\n        company: company || '',\n        email: '', // Email not available in search results\n        title: title || ''\n      };\n      \n      // Only add if we have at least a name and LinkedIn URL\n      if (lead.name && lead.linkedin_url) {\n        leads.push(lead);\n      }\n    });\n  }\n});\n\n// Return the structured data\nreturn leads;\n  \n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        32
+      ],
+      "id": "77b92d4b-d0b6-4f3c-b5e2-ee2471f28532",
+      "name": "Clean the format"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# AI Agent Prompt for Personalized LinkedIn Messages\n\nYou are an expert LinkedIn outreach specialist. Your task is to write a highly personalized and compelling LinkedIn message based on the user's preferences and the target person's profile information.\n\n## Context Information:\n\n**User's Campaign Preferences:**\n- Target Audience: {{ $('Data collection - form').item.json['Who do you want to target?'] }}\n- Service/Offer: {{ $('Data collection - form').item.json['What do you want to say or offer?'] }}\n- Message Tone: {{ $('Data collection - form').item.json['Any suggestion for the tone of message?'] }}\n\n**Target Person Details:**\n- Name: {{ $('Send Message?').item.json.name }}\n- Job Title: {{ $('Send Message?').item.json.title }}\n- Company: {{ $('Send Message?').item.json.company }}\n\n## Instructions:\n\n1. **Write a personalized LinkedIn connection request or message** that:\n   - Addresses the person by their first name\n   - References their specific role and company\n   - Clearly presents the value proposition based on user's offer\n   - Matches the requested tone ({{ $('Data collection - form').item.json['Any suggestion for the tone of message?'] }})\n   - Is relevant to the target audience ({{ $('Data collection - form').item.json['What do you want to say or offer?'] }})\n\n2. **Message Requirements:**\n   - Keep it under 300 characters if it's a connection request\n   - Keep it under 500 characters if it's a direct message\n   - Be professional yet personable\n   - Include a clear call-to-action\n   - Avoid being overly salesy\n   - Make it relevant to their industry and role\n\n3. **Personalization Elements to Include:**\n   - Their name: {{ $('Send Message?').item.json.name }}\n   - Their role: {{ $('Send Message?').item.json.title }}\n   - Their company: {{ $('Send Message?').item.json.company }}\n\n4. **Value Proposition:**\n   Focus on: {{ $('Data collection - form').item.json['What do you want to say or offer?'] }}\n\n5. **Output Format:**\n   Provide only the final message text without any additional explanations or formatting. The message should be ready to copy-paste into LinkedIn.\n\n## Example Structure:\n\"Hi [First Name], I noticed you're working as [Title] at [Company]. [Personalized opener related to their role/industry]. [Brief value proposition]. [Soft call-to-action]. Best regards!\"\n\nNow write the personalized LinkedIn message based on the above information write me in simple text format no readme or other format.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        944,
+        32
+      ],
+      "id": "5591c84b-c500-49b4-b05d-9b4eaa9c082d",
+      "name": "Write personalized message"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Data collection - form').item.json['Do you want to send linkedin messages automatically?'] }}",
+                    "rightValue": "Yes",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "ffee5a2b-9a00-4320-9652-5024b822b22c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Send Message"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6f91c6dd-47e8-4174-aeb8-35e39cce2e1e",
+                    "leftValue": "={{ $('Data collection - form').item.json['Do you want to send linkedin messages automatically?'] }}",
+                    "rightValue": "No",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Dont Send Message"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        416,
+        32
+      ],
+      "id": "d3bbb938-ff67-421e-a9a4-8c2d707c146b",
+      "name": "Send Message?"
+    },
+    {
+      "parameters": {
+        "operation": "sendMessage",
+        "linkedinUrl": "={{ $('Send Message?').item.json.linkedin_url }}",
+        "message": "={{ $json.output }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-browserflow.browserflow",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        32
+      ],
+      "id": "fa940de3-529b-473d-a78d-1ebec15331ee",
+      "name": "Send Message",
+      "credentials": {
+        "browserflowApi": {
+          "id": "4ggbbPbHRCbvkl7V",
+          "name": "Browserflow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        944,
+        -96
+      ],
+      "id": "c6f58412-d46f-4cb1-95c0-fe04561625f9",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SlmvhhNUiiM8jd8Q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        192
+      ],
+      "id": "52e3998e-4a6b-4bcb-bb69-afbb6652df63",
+      "name": "Gemini ",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SlmvhhNUiiM8jd8Q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        672
+      ],
+      "id": "559f1d99-d405-48d3-9a27-1ec113763a60",
+      "name": "Gemini  ",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SlmvhhNUiiM8jd8Q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1QbKnaCH11j1iaSRS8frHvgxFyRJDXnVqjmGIpc8_-KA",
+          "mode": "list",
+          "cachedResultName": "LinkedInLeads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QbKnaCH11j1iaSRS8frHvgxFyRJDXnVqjmGIpc8_-KA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QbKnaCH11j1iaSRS8frHvgxFyRJDXnVqjmGIpc8_-KA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.name }}",
+            "Company": "={{ $json.company }}",
+            "Title": "={{ $json.title }}",
+            "LinkedIn URL": "={{ $json.linkedin_url }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "LinkedIn URL",
+              "displayName": "LinkedIn URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        624,
+        400
+      ],
+      "id": "04ba83ec-1e11-49b6-b5b4-a5a752543136",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gfj6XJFUIe6jfJPi",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Send personalized messages",
+        "height": 400,
+        "width": 896
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        608,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "86562b16-e146-47ab-b485-f561d8105467",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Data collection - form": {
+      "main": [
+        [
+          {
+            "node": "Search Query Generator - google",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Search Query Generator - google",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google search": {
+      "main": [
+        [
+          {
+            "node": "Clean the format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Search Query Generator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Query Generator": {
+      "main": [
+        [
+          {
+            "node": "Scrape profiles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Query Generator - google": {
+      "main": [
+        [
+          {
+            "node": "Google search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Write personalized message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean the format": {
+      "main": [
+        [
+          {
+            "node": "Send Message?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write personalized message": {
+      "main": [
+        [
+          {
+            "node": "Send Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Message?": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Write personalized message",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini ": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Search Query Generator - google",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini  ": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Search Query Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "08bdd6a0-482e-4a3d-8c75-660df112da8b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "413b6306fb1e0cadc81013b766a1d0334a1f2f01366ca3fde00bf02da66e32ce"
+  },
+  "id": "BnImDwoPzaUiBgJ0",
+  "tags": []
+}
