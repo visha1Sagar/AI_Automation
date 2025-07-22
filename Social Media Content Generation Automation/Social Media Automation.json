@@ -500,7 +500,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2752,
+        2720,
         336
       ],
       "id": "87058c9f-2bff-41bc-a7d6-19aef5001ad0",
@@ -528,7 +528,7 @@
           "parameters": [
             {
               "name": "key",
-              "value": "AIzaSyDAIRf252GmTxBsCjvNO5REF_3hJxVKDuY"
+              "value": "Enter you API Key"
             }
           ]
         },
@@ -919,7 +919,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "c8c37678-938d-49c7-a044-fde1aba9452b",
+  "versionId": "b0b4f738-a473-4c4c-9479-a8cff4594122",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "413b6306fb1e0cadc81013b766a1d0334a1f2f01366ca3fde00bf02da66e32ce"
