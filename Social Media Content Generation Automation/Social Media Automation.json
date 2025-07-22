@@ -8,12 +8,136 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.1,
       "position": [
-        -560,
-        -96
+        -544,
+        16
       ],
       "id": "571c0207-89cf-4fd3-b703-74ab6449067c",
       "name": "When chat message received",
       "webhookId": "c0056b2c-fc96-4c50-a541-88cbb94452dc"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        576,
+        0
+      ],
+      "id": "150c026a-8004-4a4c-8431-65a5c23190c7",
+      "name": "No Operation, do nothing",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {\n  json: {\n    message: $input.item.json.output.answerToUser\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        384,
+        0
+      ],
+      "id": "928d948e-c4cd-4637-a689-4ac898912592",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        256
+      ],
+      "id": "a6dfc90b-e19d-44b7-b2ce-8ece6410c40f",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SlmvhhNUiiM8jd8Q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 2
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        256
+      ],
+      "id": "09edc2ce-c2b2-4bcb-86aa-bc34dcb36a08",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"continueChattingYesorNo\": \"Yes\",\n  \"answerToUser\": \"How're you\",\n  \"BUSINESS_PROFILE\": {\n    \"business_basics\": {\n      \"name\": \"GreenThumb Gardens\",\n      \"description\": \"An online retailer specializing in sustainable gardening supplies, from organic seeds and heirloom plants to eco-friendly tools and composting solutions.\",\n      \"industry\": \"E-commerce, Home & Garden, Sustainability\",\n      \"target_audience\": \"Eco-conscious home gardeners, urban dwellers with limited space, permaculture enthusiasts, and anyone looking to grow their own food sustainably.\",\n      \"value_proposition\": \"GreenThumb Gardens provides high-quality, sustainably sourced gardening products that empower individuals to cultivate thriving, environmentally friendly gardens, regardless of their experience level or space constraints.\",\n      \"business_stage\": \"Growth Stage (established online presence, seeking to expand product lines and market reach)\"\n    },\n    \"social_media_current\": \"Active on Instagram (daily tips, garden aesthetics), Facebook (community group, product updates), and Pinterest (inspiration boards, DIY guides). Limited presence on TikTok and YouTube.\",\n    \"competitors\": {\n      \"known_competitors\": [\n        \"Burpee (traditional seed catalog)\",\n        \"Gardeners Supply Company (established online retailer)\",\n        \"local nurseries (brick-and-mortar)\",\n        \"Amazon (broad marketplace)\"\n      ],\n      \"admired_competitors\": [\n        \"Baker Creek Heirloom Seeds (strong niche, excellent photography, community focus)\",\n        \"Johnny's Selected Seeds (educational content, reliable information)\"\n      ],\n      \"competitive_advantages\": [\n        \"Exclusive focus on sustainable and organic products\",\n        \"Curated selection of unique and rare plant varieties\",\n        \"Strong emphasis on educational content and community building\",\n        \"Excellent customer support and personalized recommendations\"\n      ],\n      \"market_position\": \"Niche leader in sustainable online gardening supplies, aiming to become the go-to resource for eco-conscious growers.\"\n    },\n    \"content_strategy\": {\n      \"preferred_approach\": \"Educational and inspirational, with a mix of practical guides, beautiful visuals, and community-driven content.\",\n      \"brand_voice\": \"Friendly, knowledgeable, encouraging, and passionate about sustainability. Avoid overly technical jargon, but maintain authority.\",\n      \"content_themes\": [\n        \"Organic pest control and disease prevention\",\n        \"Composting and soil health\",\n        \"Urban gardening and small-space solutions\",\n        \"Growing specific plant varieties (e.g., tomatoes, herbs, berries)\",\n        \"DIY garden projects and upcycling\",\n        \"Seasonal gardening tips and planning\"\n      ],\n      \"visual_style\": \"Bright, natural, authentic, and inviting. High-quality photography featuring lush gardens, healthy plants, and happy gardeners. Use of earthy tones and natural light.\",\n      \"risk_tolerance\": \"Moderate. Willing to experiment with new content formats (e.g., short-form video series, interactive quizzes) and engage in topical discussions related to environmental sustainability, but will avoid overly controversial or polarizing subjects.\"\n    }\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        256
+      ],
+      "id": "92912550-6325-48a2-8b8b-82e381ff5433",
+      "name": "Structured Output"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\",\n  \"geo\": \"US\",\n  \"hl\": \"en\",\n  \"date\": \"=2025-07-14 2025-07-21\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        704
+      ],
+      "id": "2f332a6e-bca5-4c99-9915-cb3b56ea734c",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "google_trends",
+        "q": "=specialty coffee",
+        "additionalFields": {
+          "data_type": "RELATED_QUERIES"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApi",
+      "typeVersion": 1,
+      "position": [
+        720,
+        464
+      ],
+      "id": "4efb38b6-a48b-47c2-9db6-e1824fe498f0",
+      "name": "Google_trends search",
+      "credentials": {
+        "serpApi": {
+          "id": "annWYJ92VKQy0I0V",
+          "name": "SerpApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert content strategist and market researcher. Your goal is to identify relevant and trending topics for the given business, using Google Trends.\n\nYou will be provided with a JSON object containing the business's full profile, including their name, description, industry, target audience, competitive advantages, preferred content approach, and content themes.\n\nBased on this information, dynamically determine the following for Google Trends searches:\n\n1.  **Geographic Location (geo):** Infer the primary country or region code (e.g., \"US\", \"CA\", \"GB\") from the target audience or business location implied in the profile. If no specific country is implied, default to \"US\".\n    * **Guidance:** Look at \"target_audience\" and \"business_basics.name/description\" for clues.\n2.  **Language (hl):** Infer the primary language code (e.g., \"en\", \"es\", \"fr\") based on the target audience or general business context. Default to \"en\" if not clearly specified.\n    * **Guidance:** Assume English unless strong indicators of another language are present.\n3.  **Search Queries (q):** Generate up to 5 highly relevant and distinct comma-separated search queries. These queries should cover:\n    * Core Business & Industry Keywords (e.g., \"specialty coffee\", \"ethical coffee\", \"coffee roasting\").\n    * Specific Content Themes & Interests (e.g., \"bean origins\", \"brewing tips\", \"behind-the-scenes roasting\").\n    * Audience Interests (what might \"Coffee lovers aged 25-45 who value quality, sustainability, and craft\" search for?).\n    * Consider potential long-tail or niche opportunities.\n4.  **Date Range (date):** Always set this to look for recent trends. Use \"now 7-d\" (past 7 days) to capture current trending topics. This will be an expression like: `=now 7-d`.\n\n**Your output must be a JSON object that strictly adheres to the n8n HTTP Request node structure provided below.**\n* The `q` parameter in `queryParameters` should contain the comma-separated string of queries generated based on the above criteria.\n* The `geo` parameter should contain the inferred geographic location code.\n* The `hl` parameter should contain the inferred language code.\n* The `date` parameter should be the dynamic string `={{ $now.minus({ days: 7 }).format('yyyy-MM-dd') }} {{ $now.format('yyyy-MM-dd') }}`. **Crucially, ensure this is output as a raw string with the n8n expression intact.** This will allow n8n to evaluate it dynamically.\n* The `data_type` should remain \"RELATED_QUERIES\".\n\n\nOutput as this example:\n{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\",\n  \"geo\": \"US\",\n  \"hl\": \"en\",\n  \"date\": \"={{ $now.minus({ days: 7 }).format('yyyy-MM-dd') }} {{ $now.format('yyyy-MM-dd') }}\"\n}\n\n\n**Given Business Profile JSON:**\n:{{ $json.output.BUSINESS_PROFILE.toJsonString() }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        160,
+        1040
+      ],
+      "id": "0f06d329-e6cc-416d-bf96-2e7f0d8dd412",
+      "name": "AI Agent2"
     },
     {
       "parameters": {
@@ -26,11 +150,10 @@
       "typeVersion": 2.1,
       "position": [
         -304,
-        -96
+        16
       ],
       "id": "fc8d5c82-2424-496d-a43b-3c3c4b89d614",
-      "name": "AI Agent",
-      "onError": "continueErrorOutput"
+      "name": "Data  Collection"
     },
     {
       "parameters": {
@@ -92,37 +215,42 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        128,
-        -16
+        80,
+        16
       ],
       "id": "1694f59e-5c5a-4188-ac3c-f27d748b72e7",
-      "name": "Switch"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        752,
-        -240
-      ],
-      "id": "150c026a-8004-4a4c-8431-65a5c23190c7",
-      "name": "No Operation, do nothing",
-      "alwaysOutputData": false
+      "name": "Enough Data Collected?"
     },
     {
       "parameters": {
-        "mode": "runOnceForEachItem",
-        "jsCode": "return {\n  json: {\n    message: $input.item.json.output.answerToUser\n  }\n};\n"
+        "content": "## 1. Data Collection\ncollecting data about the brand/business to better generate their content\n",
+        "height": 448,
+        "width": 1456
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.stickyNote",
       "position": [
-        448,
-        -176
+        -672,
+        -64
       ],
-      "id": "928d948e-c4cd-4637-a689-4ac898912592",
-      "name": "Code"
+      "typeVersion": 1,
+      "id": "90b61a05-966c-496d-b03d-755111a84a7c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Trends Search\nFor more viral content generation",
+        "height": 432,
+        "width": 848,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        80,
+        416
+      ],
+      "typeVersion": 1,
+      "id": "c7029bae-487b-4942-8280-ec65cc3b5ed9",
+      "name": "Sticky Note1"
     },
     {
       "parameters": {
@@ -131,43 +259,17 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -336,
-        144
+        352,
+        704
       ],
-      "id": "a6dfc90b-e19d-44b7-b2ce-8ece6410c40f",
-      "name": "Gemini",
+      "id": "e7d0d41e-0f52-4e9f-a3bc-18bcf9e69cc5",
+      "name": "Gemini ",
       "credentials": {
         "googlePalmApi": {
           "id": "SlmvhhNUiiM8jd8Q",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
-    },
-    {
-      "parameters": {
-        "contextWindowLength": 2
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
-      "position": [
-        -208,
-        144
-      ],
-      "id": "09edc2ce-c2b2-4bcb-86aa-bc34dcb36a08",
-      "name": "Memory"
-    },
-    {
-      "parameters": {
-        "jsonSchemaExample": "{\n  \"continueChattingYesorNo\": \"Yes\",\n  \"answerToUser\": \"How're you\",\n  \"BUSINESS_PROFILE\": {\n    \"business_basics\": {\n      \"name\": \"GreenThumb Gardens\",\n      \"description\": \"An online retailer specializing in sustainable gardening supplies, from organic seeds and heirloom plants to eco-friendly tools and composting solutions.\",\n      \"industry\": \"E-commerce, Home & Garden, Sustainability\",\n      \"target_audience\": \"Eco-conscious home gardeners, urban dwellers with limited space, permaculture enthusiasts, and anyone looking to grow their own food sustainably.\",\n      \"value_proposition\": \"GreenThumb Gardens provides high-quality, sustainably sourced gardening products that empower individuals to cultivate thriving, environmentally friendly gardens, regardless of their experience level or space constraints.\",\n      \"business_stage\": \"Growth Stage (established online presence, seeking to expand product lines and market reach)\"\n    },\n    \"social_media_current\": \"Active on Instagram (daily tips, garden aesthetics), Facebook (community group, product updates), and Pinterest (inspiration boards, DIY guides). Limited presence on TikTok and YouTube.\",\n    \"competitors\": {\n      \"known_competitors\": [\n        \"Burpee (traditional seed catalog)\",\n        \"Gardeners Supply Company (established online retailer)\",\n        \"local nurseries (brick-and-mortar)\",\n        \"Amazon (broad marketplace)\"\n      ],\n      \"admired_competitors\": [\n        \"Baker Creek Heirloom Seeds (strong niche, excellent photography, community focus)\",\n        \"Johnny's Selected Seeds (educational content, reliable information)\"\n      ],\n      \"competitive_advantages\": [\n        \"Exclusive focus on sustainable and organic products\",\n        \"Curated selection of unique and rare plant varieties\",\n        \"Strong emphasis on educational content and community building\",\n        \"Excellent customer support and personalized recommendations\"\n      ],\n      \"market_position\": \"Niche leader in sustainable online gardening supplies, aiming to become the go-to resource for eco-conscious growers.\"\n    },\n    \"content_strategy\": {\n      \"preferred_approach\": \"Educational and inspirational, with a mix of practical guides, beautiful visuals, and community-driven content.\",\n      \"brand_voice\": \"Friendly, knowledgeable, encouraging, and passionate about sustainability. Avoid overly technical jargon, but maintain authority.\",\n      \"content_themes\": [\n        \"Organic pest control and disease prevention\",\n        \"Composting and soil health\",\n        \"Urban gardening and small-space solutions\",\n        \"Growing specific plant varieties (e.g., tomatoes, herbs, berries)\",\n        \"DIY garden projects and upcycling\",\n        \"Seasonal gardening tips and planning\"\n      ],\n      \"visual_style\": \"Bright, natural, authentic, and inviting. High-quality photography featuring lush gardens, healthy plants, and happy gardeners. Use of earthy tones and natural light.\",\n      \"risk_tolerance\": \"Moderate. Willing to experiment with new content formats (e.g., short-form video series, interactive quizzes) and engage in topical discussions related to environmental sustainability, but will avoid overly controversial or polarizing subjects.\"\n    }\n  }\n}"
-      },
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "typeVersion": 1.3,
-      "position": [
-        -80,
-        144
-      ],
-      "id": "92912550-6325-48a2-8b8b-82e381ff5433",
-      "name": "Structured Output"
     },
     {
       "parameters": {
@@ -179,11 +281,27 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        352,
-        128
+        320,
+        464
       ],
       "id": "09d7cb39-2f0f-4c67-abe3-ac1d0edd473c",
-      "name": "AI Agent1"
+      "name": "Google Trend Search Query Generator"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Competitor's Data Collection (Scrapping)\nscrape competitors' content for better content generation",
+        "height": 432,
+        "width": 832,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        96,
+        944
+      ],
+      "typeVersion": 1,
+      "id": "2a704c48-8ba6-442c-b96f-9522033b2d21",
+      "name": "Sticky Note2"
     },
     {
       "parameters": {
@@ -192,11 +310,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        384,
-        352
+        160,
+        1232
       ],
-      "id": "e7d0d41e-0f52-4e9f-a3bc-18bcf9e69cc5",
-      "name": "Google Gemini Chat Model",
+      "id": "a9f14121-2054-4390-b6b4-d880a6193b33",
+      "name": "Gemini  ",
       "credentials": {
         "googlePalmApi": {
           "id": "SlmvhhNUiiM8jd8Q",
@@ -206,40 +324,100 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\",\n  \"geo\": \"US\",\n  \"hl\": \"en\",\n  \"date\": \"=2025-07-14 2025-07-21\"\n}"
+        "content": "## 3. Content Generation",
+        "height": 608,
+        "width": 1328,
+        "color": 6
       },
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "typeVersion": 1.3,
+      "type": "n8n-nodes-base.stickyNote",
       "position": [
-        512,
-        352
+        1040,
+        576
       ],
-      "id": "2f332a6e-bca5-4c99-9915-cb3b56ea734c",
-      "name": "Structured Output Parser"
+      "typeVersion": 1,
+      "id": "de448fb5-bfd0-4c22-8ce8-692965980148",
+      "name": "Sticky Note3"
     },
     {
       "parameters": {
-        "operation": "google_trends",
-        "q": "=specialty coffee",
-        "additionalFields": {
-          "data_type": "RELATED_QUERIES"
-        },
-        "requestOptions": {}
+        "options": {}
       },
-      "type": "n8n-nodes-serpapi.serpApi",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        752,
-        128
+        1184,
+        912
       ],
-      "id": "4efb38b6-a48b-47c2-9db6-e1824fe498f0",
-      "name": "Google_trends search",
+      "id": "61808b24-e6b1-4b13-ae35-3aa0671c773a",
+      "name": "Gemini1",
       "credentials": {
-        "serpApi": {
-          "id": "annWYJ92VKQy0I0V",
-          "name": "SerpApi account"
+        "googlePalmApi": {
+          "id": "SlmvhhNUiiM8jd8Q",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "  \n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        1184,
+        752
+      ],
+      "id": "aea3562d-c887-4f45-8061-78e433edd061",
+      "name": "Planner"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1632,
+        752
+      ],
+      "id": "f633b451-9ee6-4920-9490-804f4233a10b",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1936,
+        928
+      ],
+      "id": "875aec30-795b-430a-bf1a-f566b3a5e96b",
+      "name": "Gemini2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SlmvhhNUiiM8jd8Q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "   \n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        1936,
+        768
+      ],
+      "id": "20d62cf5-57af-47f6-a259-68a16e15220b",
+      "name": "Content Generator"
     }
   ],
   "pinData": {},
@@ -248,43 +426,7 @@
       "main": [
         [
           {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent": {
-      "main": [
-        [
-          {
-            "node": "Switch",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "No Operation, do nothing",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Switch": {
-      "main": [
-        [
-          {
-            "node": "Code",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "AI Agent1",
+            "node": "Data  Collection",
             "type": "main",
             "index": 0
           }
@@ -311,7 +453,7 @@
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent",
+            "node": "Data  Collection",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -322,7 +464,7 @@
       "ai_memory": [
         [
           {
-            "node": "AI Agent",
+            "node": "Data  Collection",
             "type": "ai_memory",
             "index": 0
           }
@@ -333,19 +475,8 @@
       "ai_outputParser": [
         [
           {
-            "node": "AI Agent",
+            "node": "Data  Collection",
             "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent1",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -355,14 +486,55 @@
       "ai_outputParser": [
         [
           {
-            "node": "AI Agent1",
+            "node": "Google Trend Search Query Generator",
             "type": "ai_outputParser",
             "index": 0
           }
         ]
       ]
     },
-    "AI Agent1": {
+    "Data  Collection": {
+      "main": [
+        [
+          {
+            "node": "Enough Data Collected?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Enough Data Collected?": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Trend Search Query Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini ": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Google Trend Search Query Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Trend Search Query Generator": {
       "main": [
         [
           {
@@ -372,13 +544,79 @@
           }
         ]
       ]
+    },
+    "Gemini  ": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Planner",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google_trends search": {
+      "main": [
+        []
+      ]
+    },
+    "Planner": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Content Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Content Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Generator": {
+      "main": [
+        []
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "dca79eef-9511-4e7c-bd87-3ffc47440827",
+  "versionId": "66c93b9d-3611-4589-97b6-bba28b20149e",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "413b6306fb1e0cadc81013b766a1d0334a1f2f01366ca3fde00bf02da66e32ce"
