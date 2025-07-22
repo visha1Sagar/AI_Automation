@@ -1,0 +1,388 @@
+{
+  "name": "Social Media Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        -96
+      ],
+      "id": "571c0207-89cf-4fd3-b703-74ab6449067c",
+      "name": "When chat message received",
+      "webhookId": "c0056b2c-fc96-4c50-a541-88cbb94452dc"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Expert Social Media Strategist - Business Discovery Agent\nYou are an expert social media strategist and business consultant conducting a smooth, engaging discovery session. Your mission is to understand their business while keeping them excited about the process - NOT to overwhelm them with lengthy questioning.\nCore Philosophy:\nKEEP IT SMOOTH & EASY - We can learn more through feedback later, but only if they stick with the process. Quality over quantity in questioning.\nUser's Current Message:\n{{ $json.chatInput }}\nYour Objectives:\n\nUnderstand their business - industry, target audience, unique value proposition, goals\nIdentify competitive landscape - who they compete with and how\nDetermine content strategy preference - trend-focused vs competitor-inspired vs original\nKeep them engaged - smooth onboarding is MORE important than perfect data collection\nKnow when to stop - gather sufficient info to move forward, not everything possible\n\nInformation Collection Priority:\nESSENTIAL (Must Have):\n\nBusiness Description: What they do, who they help\nTarget Audience: Who their ideal customer is\nKnown Competitors: At least 1-2 main competitors\nContent Approach: Trend-focused, competitor-inspired, or original\n\nNICE TO HAVE (Don't Force):\n\nDetailed demographics, specific pain points, visual preferences\nCurrent social media performance, exact metrics\nDetailed competitive advantages, market positioning nuances\n\nConversation Flow Strategy:\nOPENING (If first interaction):\n\"Hi! I'm here to help you create a winning social media strategy tailored specifically to your business. Let's start with getting to know you better. Can you tell me about your business in a few sentences - what do you do and who do you help?\"\nINTELLIGENT FOLLOW-UP RULES:\n\nVague answers → Ask for ONE specific example (not multiple)\nMention competitors → \"What do you like about their approach?\" (don't deep dive unless they're engaged)\nMention struggles → Acknowledge briefly, don't therapy session\nSeem uncertain → Give 2-3 simple options to choose from\nGetting detailed → Great! Follow their energy level\nGetting short/disengaged → Wrap up and move forward\n\nCONVERSATION MANAGEMENT:\n\nMaximum 2 questions at a time (often just 1 is better)\nAcknowledge their response before asking next question\nUse their language back to them\nMatch their energy - if they're brief, don't force elaboration\nNo interrogation feeling - make it feel like helpful consultation\n\nWhen to Wrap Up:\nStop questioning when you have enough to move forward, even if incomplete:\n\nBasic business understanding ✓\nTarget audience identified ✓\nAt least 1-2 competitors mentioned ✓\nContent approach preference indicated ✓\n\nWrap-up phrase: \"Perfect! I have a great understanding of your business and what you're looking for. Based on everything you've shared, I can see that [summarize key points]. Let me create a customized content strategy that focuses on [their preferences].\"\nCRITICAL: JSON Response Format Requirements\nYou MUST respond with ONLY the JSON object below. Do NOT add any wrapper objects, explanations, or additional text. Your entire response must be this exact JSON structure:\nRequired Values:\n\ncontinueChattingYesorNo: Must be exactly \"Yes\" or \"No\" (capital Y/N)\nAll fields must be filled with meaningful content - no empty strings\nArrays cannot be empty - provide at least placeholder values\n\nEXACT JSON FORMAT (copy this structure exactly):\njson{\n  \"continueChattingYesorNo\": \"Yes\",\n  \"answerToUser\": \"Your conversational response here\",\n  \"BUSINESS_PROFILE\": {\n    \"business_basics\": {\n      \"name\": \"Business name here\",\n      \"description\": \"What they do and who they help\",\n      \"industry\": \"Industry category\",\n      \"target_audience\": \"Who their ideal customer is\",\n      \"value_proposition\": \"What makes them unique\",\n      \"business_stage\": \"Stage of business (startup/growth/established)\"\n    },\n    \"social_media_current\": \"Current social media status or approach\",\n    \"competitors\": {\n      \"known_competitors\": [\"Competitor 1\", \"Competitor 2\"],\n      \"admired_competitors\": [\"Companies they look up to\"],\n      \"competitive_advantages\": [\"What makes them different\"],\n      \"market_position\": \"Where they sit in the market\"\n    },\n    \"content_strategy\": {\n      \"preferred_approach\": \"Their content preference style\",\n      \"brand_voice\": \"Tone and personality\",\n      \"content_themes\": [\"Theme 1\", \"Theme 2\", \"Theme 3\"],\n      \"visual_style\": \"Visual preferences\",\n      \"risk_tolerance\": \"Conservative/moderate/bold approach\"\n    }\n  }\n}\nCommunication Style:\n\nConversational but professional - like a knowledgeable friend helping out\nCurious and engaged - genuine interest in their success\nSupportive and encouraging - build their confidence\nConcise and clear - no overwhelming jargon\nAdaptive - match their communication style and energy level\n\nCRITICAL SUCCESS METRICS:\n\nEngagement Level: Are they giving detailed responses or short ones?\nInformation Quality: Do you have enough to move forward?\nMomentum: Are they still excited or getting fatigued?\n\nRemember: A 70% complete profile with an excited user beats a 100% complete profile with a frustrated user who abandons the process. Keep them moving forward!\nFINAL REMINDER:\nYour response must be ONLY the JSON object above. No explanations, no wrapper objects, no additional text. Just the pure JSON structure.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -304,
+        -96
+      ],
+      "id": "fc8d5c82-2424-496d-a43b-3c3c4b89d614",
+      "name": "AI Agent",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.continueChattingYesorNo.toLowerCase() }}",
+                    "rightValue": "yes",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c64ab850-e6ed-4bb9-a977-8703b08ae831"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Continue chatting"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "86b732c7-b4a2-4316-bad3-ef806e49ac08",
+                    "leftValue": "={{ $json.output.continueChattingYesorNo.toLowerCase() }}",
+                    "rightValue": "no",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Memory collected"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        128,
+        -16
+      ],
+      "id": "1694f59e-5c5a-4188-ac3c-f27d748b72e7",
+      "name": "Switch"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        752,
+        -240
+      ],
+      "id": "150c026a-8004-4a4c-8431-65a5c23190c7",
+      "name": "No Operation, do nothing",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {\n  json: {\n    message: $input.item.json.output.answerToUser\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        -176
+      ],
+      "id": "928d948e-c4cd-4637-a689-4ac898912592",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        144
+      ],
+      "id": "a6dfc90b-e19d-44b7-b2ce-8ece6410c40f",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SlmvhhNUiiM8jd8Q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 2
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        144
+      ],
+      "id": "09edc2ce-c2b2-4bcb-86aa-bc34dcb36a08",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"continueChattingYesorNo\": \"Yes\",\n  \"answerToUser\": \"How're you\",\n  \"BUSINESS_PROFILE\": {\n    \"business_basics\": {\n      \"name\": \"GreenThumb Gardens\",\n      \"description\": \"An online retailer specializing in sustainable gardening supplies, from organic seeds and heirloom plants to eco-friendly tools and composting solutions.\",\n      \"industry\": \"E-commerce, Home & Garden, Sustainability\",\n      \"target_audience\": \"Eco-conscious home gardeners, urban dwellers with limited space, permaculture enthusiasts, and anyone looking to grow their own food sustainably.\",\n      \"value_proposition\": \"GreenThumb Gardens provides high-quality, sustainably sourced gardening products that empower individuals to cultivate thriving, environmentally friendly gardens, regardless of their experience level or space constraints.\",\n      \"business_stage\": \"Growth Stage (established online presence, seeking to expand product lines and market reach)\"\n    },\n    \"social_media_current\": \"Active on Instagram (daily tips, garden aesthetics), Facebook (community group, product updates), and Pinterest (inspiration boards, DIY guides). Limited presence on TikTok and YouTube.\",\n    \"competitors\": {\n      \"known_competitors\": [\n        \"Burpee (traditional seed catalog)\",\n        \"Gardeners Supply Company (established online retailer)\",\n        \"local nurseries (brick-and-mortar)\",\n        \"Amazon (broad marketplace)\"\n      ],\n      \"admired_competitors\": [\n        \"Baker Creek Heirloom Seeds (strong niche, excellent photography, community focus)\",\n        \"Johnny's Selected Seeds (educational content, reliable information)\"\n      ],\n      \"competitive_advantages\": [\n        \"Exclusive focus on sustainable and organic products\",\n        \"Curated selection of unique and rare plant varieties\",\n        \"Strong emphasis on educational content and community building\",\n        \"Excellent customer support and personalized recommendations\"\n      ],\n      \"market_position\": \"Niche leader in sustainable online gardening supplies, aiming to become the go-to resource for eco-conscious growers.\"\n    },\n    \"content_strategy\": {\n      \"preferred_approach\": \"Educational and inspirational, with a mix of practical guides, beautiful visuals, and community-driven content.\",\n      \"brand_voice\": \"Friendly, knowledgeable, encouraging, and passionate about sustainability. Avoid overly technical jargon, but maintain authority.\",\n      \"content_themes\": [\n        \"Organic pest control and disease prevention\",\n        \"Composting and soil health\",\n        \"Urban gardening and small-space solutions\",\n        \"Growing specific plant varieties (e.g., tomatoes, herbs, berries)\",\n        \"DIY garden projects and upcycling\",\n        \"Seasonal gardening tips and planning\"\n      ],\n      \"visual_style\": \"Bright, natural, authentic, and inviting. High-quality photography featuring lush gardens, healthy plants, and happy gardeners. Use of earthy tones and natural light.\",\n      \"risk_tolerance\": \"Moderate. Willing to experiment with new content formats (e.g., short-form video series, interactive quizzes) and engage in topical discussions related to environmental sustainability, but will avoid overly controversial or polarizing subjects.\"\n    }\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        144
+      ],
+      "id": "92912550-6325-48a2-8b8b-82e381ff5433",
+      "name": "Structured Output"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert content strategist and market researcher. Your goal is to identify relevant and trending topics for the given business, using Google Trends.\n\nYou will be provided with a JSON object containing the business's full profile, including their name, description, industry, target audience, competitive advantages, preferred content approach, and content themes.\n\nBased on this information, dynamically determine the following for Google Trends searches:\n\n1.  **Geographic Location (geo):** Infer the primary country or region code (e.g., \"US\", \"CA\", \"GB\") from the target audience or business location implied in the profile. If no specific country is implied, default to \"US\".\n    * **Guidance:** Look at \"target_audience\" and \"business_basics.name/description\" for clues.\n2.  **Language (hl):** Infer the primary language code (e.g., \"en\", \"es\", \"fr\") based on the target audience or general business context. Default to \"en\" if not clearly specified.\n    * **Guidance:** Assume English unless strong indicators of another language are present.\n3.  **Search Queries (q):** Generate up to 5 highly relevant and distinct comma-separated search queries. These queries should cover:\n    * Core Business & Industry Keywords (e.g., \"specialty coffee\", \"ethical coffee\", \"coffee roasting\").\n    * Specific Content Themes & Interests (e.g., \"bean origins\", \"brewing tips\", \"behind-the-scenes roasting\").\n    * Audience Interests (what might \"Coffee lovers aged 25-45 who value quality, sustainability, and craft\" search for?).\n    * Consider potential long-tail or niche opportunities.\n4.  **Date Range (date):** Always set this to look for recent trends. Use \"now 7-d\" (past 7 days) to capture current trending topics. This will be an expression like: `=now 7-d`.\n\n**Your output must be a JSON object that strictly adheres to the n8n HTTP Request node structure provided below.**\n* The `q` parameter in `queryParameters` should contain the comma-separated string of queries generated based on the above criteria.\n* The `geo` parameter should contain the inferred geographic location code.\n* The `hl` parameter should contain the inferred language code.\n* The `date` parameter should be the dynamic string `={{ $now.minus({ days: 7 }).format('yyyy-MM-dd') }} {{ $now.format('yyyy-MM-dd') }}`. **Crucially, ensure this is output as a raw string with the n8n expression intact.** This will allow n8n to evaluate it dynamically.\n* The `data_type` should remain \"RELATED_QUERIES\".\n\n\nOutput as this example:\n{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\",\n  \"geo\": \"US\",\n  \"hl\": \"en\",\n  \"date\": \"={{ $now.minus({ days: 7 }).format('yyyy-MM-dd') }} {{ $now.format('yyyy-MM-dd') }}\"\n}\n\n\n**Given Business Profile JSON:**\n:{{ $json.output.BUSINESS_PROFILE.toJsonString() }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        352,
+        128
+      ],
+      "id": "09d7cb39-2f0f-4c67-abe3-ac1d0edd473c",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        384,
+        352
+      ],
+      "id": "e7d0d41e-0f52-4e9f-a3bc-18bcf9e69cc5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SlmvhhNUiiM8jd8Q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\",\n  \"geo\": \"US\",\n  \"hl\": \"en\",\n  \"date\": \"=2025-07-14 2025-07-21\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        512,
+        352
+      ],
+      "id": "2f332a6e-bca5-4c99-9915-cb3b56ea734c",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "google_trends",
+        "q": "=specialty coffee",
+        "additionalFields": {
+          "data_type": "RELATED_QUERIES"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApi",
+      "typeVersion": 1,
+      "position": [
+        752,
+        128
+      ],
+      "id": "4efb38b6-a48b-47c2-9db6-e1824fe498f0",
+      "name": "Google_trends search",
+      "credentials": {
+        "serpApi": {
+          "id": "annWYJ92VKQy0I0V",
+          "name": "SerpApi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        []
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Google_trends search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dca79eef-9511-4e7c-bd87-3ffc47440827",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "413b6306fb1e0cadc81013b766a1d0334a1f2f01366ca3fde00bf02da66e32ce"
+  },
+  "id": "kynIVIYEoolw5PKg",
+  "tags": []
+}
