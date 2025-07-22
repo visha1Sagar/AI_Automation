@@ -8,8 +8,8 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.1,
       "position": [
-        -544,
-        16
+        -496,
+        192
       ],
       "id": "571c0207-89cf-4fd3-b703-74ab6449067c",
       "name": "When chat message received",
@@ -20,8 +20,8 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        576,
-        0
+        496,
+        176
       ],
       "id": "150c026a-8004-4a4c-8431-65a5c23190c7",
       "name": "No Operation, do nothing",
@@ -35,8 +35,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        384,
-        0
+        352,
+        160
       ],
       "id": "928d948e-c4cd-4637-a689-4ac898912592",
       "name": "Code"
@@ -48,8 +48,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -336,
-        256
+        -320,
+        384
       ],
       "id": "a6dfc90b-e19d-44b7-b2ce-8ece6410c40f",
       "name": "Gemini",
@@ -68,7 +68,7 @@
       "typeVersion": 1.3,
       "position": [
         -208,
-        256
+        384
       ],
       "id": "09edc2ce-c2b2-4bcb-86aa-bc34dcb36a08",
       "name": "Memory"
@@ -80,29 +80,16 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        -80,
-        256
+        -48,
+        384
       ],
       "id": "92912550-6325-48a2-8b8b-82e381ff5433",
       "name": "Structured Output"
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\",\n  \"geo\": \"US\",\n  \"hl\": \"en\",\n  \"date\": \"=2025-07-14 2025-07-21\"\n}"
-      },
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "typeVersion": 1.3,
-      "position": [
-        528,
-        704
-      ],
-      "id": "2f332a6e-bca5-4c99-9915-cb3b56ea734c",
-      "name": "Structured Output Parser"
-    },
-    {
-      "parameters": {
         "operation": "google_trends",
-        "q": "=specialty coffee",
+        "q": "={{ $json.query }}",
         "additionalFields": {
           "data_type": "RELATED_QUERIES"
         },
@@ -111,8 +98,8 @@
       "type": "n8n-nodes-serpapi.serpApi",
       "typeVersion": 1,
       "position": [
-        720,
-        464
+        1520,
+        304
       ],
       "id": "4efb38b6-a48b-47c2-9db6-e1824fe498f0",
       "name": "Google_trends search",
@@ -133,8 +120,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        160,
-        1040
+        976,
+        976
       ],
       "id": "0f06d329-e6cc-416d-bf96-2e7f0d8dd412",
       "name": "AI Agent2"
@@ -149,8 +136,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        -304,
-        16
+        -256,
+        192
       ],
       "id": "fc8d5c82-2424-496d-a43b-3c3c4b89d614",
       "name": "Data  Collection"
@@ -215,8 +202,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        80,
-        16
+        112,
+        192
       ],
       "id": "1694f59e-5c5a-4188-ac3c-f27d748b72e7",
       "name": "Enough Data Collected?"
@@ -225,12 +212,12 @@
       "parameters": {
         "content": "## 1. Data Collection\ncollecting data about the brand/business to better generate their content\n",
         "height": 448,
-        "width": 1456
+        "width": 1232
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -672,
-        -64
+        -544,
+        112
       ],
       "typeVersion": 1,
       "id": "90b61a05-966c-496d-b03d-755111a84a7c",
@@ -239,14 +226,14 @@
     {
       "parameters": {
         "content": "## 2. Trends Search\nFor more viral content generation",
-        "height": 432,
-        "width": 848,
+        "height": 768,
+        "width": 1520,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        80,
-        416
+        732,
+        -40
       ],
       "typeVersion": 1,
       "id": "c7029bae-487b-4942-8280-ec65cc3b5ed9",
@@ -259,8 +246,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        352,
-        704
+        800,
+        544
       ],
       "id": "e7d0d41e-0f52-4e9f-a3bc-18bcf9e69cc5",
       "name": "Gemini ",
@@ -274,30 +261,30 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You are an expert content strategist and market researcher. Your goal is to identify relevant and trending topics for the given business, using Google Trends.\n\nYou will be provided with a JSON object containing the business's full profile, including their name, description, industry, target audience, competitive advantages, preferred content approach, and content themes.\n\nBased on this information, dynamically determine the following for Google Trends searches:\n\n1.  **Geographic Location (geo):** Infer the primary country or region code (e.g., \"US\", \"CA\", \"GB\") from the target audience or business location implied in the profile. If no specific country is implied, default to \"US\".\n    * **Guidance:** Look at \"target_audience\" and \"business_basics.name/description\" for clues.\n2.  **Language (hl):** Infer the primary language code (e.g., \"en\", \"es\", \"fr\") based on the target audience or general business context. Default to \"en\" if not clearly specified.\n    * **Guidance:** Assume English unless strong indicators of another language are present.\n3.  **Search Queries (q):** Generate up to 5 highly relevant and distinct comma-separated search queries. These queries should cover:\n    * Core Business & Industry Keywords (e.g., \"specialty coffee\", \"ethical coffee\", \"coffee roasting\").\n    * Specific Content Themes & Interests (e.g., \"bean origins\", \"brewing tips\", \"behind-the-scenes roasting\").\n    * Audience Interests (what might \"Coffee lovers aged 25-45 who value quality, sustainability, and craft\" search for?).\n    * Consider potential long-tail or niche opportunities.\n4.  **Date Range (date):** Always set this to look for recent trends. Use \"now 7-d\" (past 7 days) to capture current trending topics. This will be an expression like: `=now 7-d`.\n\n**Your output must be a JSON object that strictly adheres to the n8n HTTP Request node structure provided below.**\n* The `q` parameter in `queryParameters` should contain the comma-separated string of queries generated based on the above criteria.\n* The `geo` parameter should contain the inferred geographic location code.\n* The `hl` parameter should contain the inferred language code.\n* The `date` parameter should be the dynamic string `={{ $now.minus({ days: 7 }).format('yyyy-MM-dd') }} {{ $now.format('yyyy-MM-dd') }}`. **Crucially, ensure this is output as a raw string with the n8n expression intact.** This will allow n8n to evaluate it dynamically.\n* The `data_type` should remain \"RELATED_QUERIES\".\n\n\nOutput as this example:\n{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\",\n  \"geo\": \"US\",\n  \"hl\": \"en\",\n  \"date\": \"={{ $now.minus({ days: 7 }).format('yyyy-MM-dd') }} {{ $now.format('yyyy-MM-dd') }}\"\n}\n\n\n**Given Business Profile JSON:**\n:{{ $json.output.BUSINESS_PROFILE.toJsonString() }}",
+        "text": "=You are an expert content strategist and market researcher. Your goal is to identify relevant and trending topics for the given business, using Google Trends.\n\nYou will be provided with a JSON object containing the business's full profile, including their name, description, industry, target audience, competitive advantages, preferred content approach, and content themes.\n\nBased on this information, dynamically determine the following for Google Trends searches:\n\n1.  **Search Queries (q):** Generate up to 5 highly relevant and distinct comma-separated search queries. These queries should cover:\n    * Core Business & Industry Keywords (e.g., \"specialty coffee\", \"ethical coffee\", \"coffee roasting\").\n    * Specific Content Themes & Interests (e.g., \"bean origins\", \"brewing tips\", \"behind-the-scenes roasting\").\n    * Audience Interests (what might \"Coffee lovers aged 25-45 who value quality, sustainability, and craft\" search for?).\n    * Consider potential long-tail or niche opportunities.\n\n\n**Your output must be a JSON object that strictly adheres to the n8n HTTP Request node structure provided below.**\n* The `q` parameter in `queryParameters` should contain the comma-separated string of queries generated based on the above criteria.\n\n\nOutput as this example:\n{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\"\n}\n\n\n**Given Business Profile JSON:**\n:{{ $json.output.BUSINESS_PROFILE.toJsonString() }}",
         "hasOutputParser": true,
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        320,
-        464
+        784,
+        336
       ],
       "id": "09d7cb39-2f0f-4c67-abe3-ac1d0edd473c",
       "name": "Google Trend Search Query Generator"
     },
     {
       "parameters": {
-        "content": "## 2. Competitor's Data Collection (Scrapping)\nscrape competitors' content for better content generation",
+        "content": "## 2. Competitor's Data Collection (Scrapping)\nscrape competitors' content for better content generation - apify not working for now :(",
         "height": 432,
         "width": 832,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        96,
-        944
+        736,
+        832
       ],
       "typeVersion": 1,
       "id": "2a704c48-8ba6-442c-b96f-9522033b2d21",
@@ -310,8 +297,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        160,
-        1232
+        1120,
+        1120
       ],
       "id": "a9f14121-2054-4390-b6b4-d880a6193b33",
       "name": "Gemini  ",
@@ -326,13 +313,13 @@
       "parameters": {
         "content": "## 3. Content Generation",
         "height": 608,
-        "width": 1328,
+        "width": 1312,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1040,
-        576
+        2288,
+        48
       ],
       "typeVersion": 1,
       "id": "de448fb5-bfd0-4c22-8ce8-692965980148",
@@ -345,8 +332,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1184,
-        912
+        2336,
+        544
       ],
       "id": "61808b24-e6b1-4b13-ae35-3aa0671c773a",
       "name": "Gemini1",
@@ -360,17 +347,44 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "  \n",
+        "text": "=You are an expert Social Media Content Planner for \"{{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.business_basics.name }}\". Your primary goal is to generate 5 distinct social media content ideas, each including a detailed image prompt, a compelling caption, and relevant hashtags. These ideas should be specifically tailored for Instagram, designed to engage {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.business_basics.target_audience }}\n\nYou have access to the following information:\n\n---\n**BUSINESS PROFILE:**\n{{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.toJsonString() }}\n\nGOOGLE TRENDS INFORMATION :\n{{ $json.messages.toJsonString() }}\n\n\nINSTRUCTIONS FOR CONTENT GENERATION:\n\nGenerate exactly 5 distinct social media content items. Each item must be a complete, ready-to-use package.\n\nIntegrate insights from the GOOGLE_TRENDS_INFORMATION into the content ideas where relevant and natural, subtly weaving trending topics into captions or image concepts.\n\nStrictly adhere to the brand's brand voice: {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.content_strategy.brand_voice }}\n\nFocus on the core content themes: {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.content_strategy.content_themes.toJsonString() }}\n\nEnsure the IMAGE_PROMPT is highly detailed, evocative, and reflective of an \"authentic, artisanal\" visual style. It should guide an AI image generator (e.g., Midjourney, DALL-E) to produce a high-quality, relevant image. Include details about composition, lighting, mood, colors, and specific elements.\n\nCAPTION should be engaging, informative, and encourage interaction or a deeper understanding of brand's values\n\nHASHTAGS should be a mix of broad, niche, and trending (if applicable to the content) to maximize discoverability.\n\nOUTPUT FORMAT:\nProvide your response as a JSON array, where each element is a content item object following this exact structure:\n\nJSON\n{\n \"first\": {\n    \"content_item_number\": 1,\n    \"theme\": \"Brief, descriptive theme for this content piece (e.g., 'Exploring Ethiopian Yirgacheffe Origins')\",\n    \"IMAGE_PROMPT\": \"A hyper-realistic, close-up shot of roasted coffee beans gracefully falling into a vintage, artisan-crafted coffee grinder. Focus on the rich texture of the beans, dramatic chiaroscuro lighting, warm earthy tones, with subtle steam rising. Authentic, artisanal, cinematic, 4k.\",\n    \"CAPTION\": \"Ever wondered what goes into creating that perfect cup? It starts long before the brew. Join us behind the scenes as we prepare our ethically-sourced beans for their transformation. From farm to grinder, every step is a labor of love and precision. #RoastedDreams #CoffeeCraft #EthicalCoffee #BehindTheBeans\",\n    \"HASHTAGS\": [\"#SpecialtyCoffee\", \"#CoffeeRoasting\", \"#BeanToCup\", \"#ArtisanCoffee\", \"#SustainableSourcing\", \"#CoffeeLover\"]\n  },\n  \"second\" : {\n    \"content_item_number\": 2,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Detailed prompt for an AI image generator (e.g., 'A minimalist overhead shot of a perfectly brewed pour-over coffee, steam gently rising, with a blooming coffee bed visible in a clear glass carafe. Natural morning light, clean white background, focus on texture and clarity. Authentic, aesthetic, 4k.')\",\n    \"CAPTION\": \"Your morning ritual just got an upgrade! Master the art of the pour-over with our top tips for a consistently delicious cup. From grind size to water temperature, we're breaking down the secrets to unlock your coffee's full potential. What's your favorite brewing method? #PourOverPerfection #BrewingTips #HomeBarista #CoffeeEducation #RoastedDreams #CoffeeCommunity\",\n    \"HASHTAGS\": [\"#BrewGuides\", \"#CoffeeTips\", \"#SpecialtyCoffee\", \"#HomeBrew\", \"#CoffeeLovers\", \"#PerfectCup\"]\n  }\n  }\n\n",
+        "hasOutputParser": true,
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        1184,
-        752
+        2352,
+        336
       ],
       "id": "aea3562d-c887-4f45-8061-78e433edd061",
       "name": "Planner"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1008,
+        528
+      ],
+      "id": "aba0f554-383f-4d91-8cac-04812adcb49e",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "// The 'items' variable holds the input data from the previous node.\n// It's an array of objects, where each object represents an item in n8n.\n// This code assumes the input will always have at least one item and the expected structure.\nfor (const item of items) {\n  // Access the 'q' property from the 'output' object of the current item.\n  const queryString = item.json.output.q;\n\n  // Split the string by ', ' (comma followed by a space)\n  // Then, map over the resulting array to trim any whitespace from each query.\n  const queries = queryString.split(', ').map(query => query.trim());\n\n  // Transform the array of queries into an array of objects,\n  // where each object represents a single query as a separate item for n8n.\n  // This allows subsequent nodes to process each query individually.\n  const outputItems = queries.map(query => ({\n    json: {\n      query: query // Each query is now under a 'query' key in its own item\n    }\n  }));\n\n  // Return the array of new items.\n  return outputItems;\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        304
+      ],
+      "id": "169d5e6d-6b1b-4508-bd7d-547c3e9bfb16",
+      "name": "Code1"
     },
     {
       "parameters": {
@@ -379,45 +393,204 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1632,
-        752
+        1328,
+        288
       ],
-      "id": "f633b451-9ee6-4920-9490-804f4233a10b",
+      "id": "f671c092-2e6b-48d1-8900-e3d2189270df",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "={{ $('If').all()[0].json.related_queries.toJsonString() }}"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryManager",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        448
+      ],
+      "id": "7111e8eb-d8b7-48c9-ad73-0b574abb7d97",
+      "name": "Chat Memory Manager"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('When chat message received').item.json.sessionId }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1872,
+        288
+      ],
+      "id": "8834f404-78aa-43dd-9d16-bcb523727eb6",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "903e114a-0567-4367-8e6f-118fd8b10dfa",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1696,
+        400
+      ],
+      "id": "6eb27189-5b02-4e18-b279-ac17678ba77f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryManager",
+      "typeVersion": 1.1,
+      "position": [
+        1696,
+        112
+      ],
+      "id": "a08d0fda-62e3-4482-aaac-a258ff378a79",
+      "name": "Chat Memory Manager2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n \"first\": {\n    \"content_item_number\": 1,\n    \"theme\": \"Brief, descriptive theme for this content piece (e.g., 'Exploring Ethiopian Yirgacheffe Origins')\",\n    \"IMAGE_PROMPT\": \"A hyper-realistic, close-up shot of roasted coffee beans gracefully falling into a vintage, artisan-crafted coffee grinder. Focus on the rich texture of the beans, dramatic chiaroscuro lighting, warm earthy tones, with subtle steam rising. Authentic, artisanal, cinematic, 4k.\",\n    \"CAPTION\": \"Ever wondered what goes into creating that perfect cup? It starts long before the brew. Join us behind the scenes as we prepare our ethically-sourced beans for their transformation. From farm to grinder, every step is a labor of love and precision. #RoastedDreams #CoffeeCraft #EthicalCoffee #BehindTheBeans\",\n    \"HASHTAGS\": [\"#SpecialtyCoffee\", \"#CoffeeRoasting\", \"#BeanToCup\", \"#ArtisanCoffee\", \"#SustainableSourcing\", \"#CoffeeLover\"]\n  },\n  \"second\" : {\n    \"content_item_number\": 2,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Detailed prompt for an AI image generator (e.g., 'A minimalist overhead shot of a perfectly brewed pour-over coffee, steam gently rising, with a blooming coffee bed visible in a clear glass carafe. Natural morning light, clean white background, focus on texture and clarity. Authentic, aesthetic, 4k.')\",\n    \"CAPTION\": \"Your morning ritual just got an upgrade! Master the art of the pour-over with our top tips for a consistently delicious cup. From grind size to water temperature, we're breaking down the secrets to unlock your coffee's full potential. What's your favorite brewing method? #PourOverPerfection #BrewingTips #HomeBarista #CoffeeEducation #RoastedDreams #CoffeeCommunity\",\n    \"HASHTAGS\": [\"#BrewGuides\", \"#CoffeeTips\", \"#SpecialtyCoffee\", \"#HomeBrew\", \"#CoffeeLovers\", \"#PerfectCup\"]\n  }\n  }\n\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2576,
+        512
+      ],
+      "id": "4d9d8625-2a06-42c0-9c9b-431bf8e39d97",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// The 'items' variable holds the input data from the previous node.\n// It's an array of objects, where each object contains the 'output' key\n// with 'first' and 'second' content items.\nconst outputItems = [];\n\n// Iterate over each item received by this node.\nfor (const item of items) {\n  // Check if the 'output' property exists and has 'first' and 'second' content.\n  if (item.json.output && item.json.output.first) {\n    // Add the 'first' content item to our new array.\n    // We wrap it in a 'json' key as n8n expects this structure for new items.\n    outputItems.push({ json: item.json.output.first });\n  }\n\n  if (item.json.output && item.json.output.second) {\n    // Add the 'second' content item to our new array.\n    outputItems.push({ json: item.json.output.second });\n  }\n}\n\n// Return the new array of flattened content items.\n// Each content item (image prompt, caption, hashtags) will now be a separate item\n// in the n8n workflow, ready for individual processing.\nreturn outputItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2752,
+        336
+      ],
+      "id": "87058c9f-2bff-41bc-a7d6-19aef5001ad0",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2896,
+        352
+      ],
+      "id": "32ddaa7c-30f1-46d1-8672-b2a578c905f8",
       "name": "Loop Over Items"
     },
     {
       "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "AIzaSyDAIRf252GmTxBsCjvNO5REF_3hJxVKDuY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"{{ $json.IMAGE_PROMPT }}\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"responseModalities\": [\n      \"TEXT\",\n      \"IMAGE\"\n    ]\n  }\n}",
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        1936,
-        928
+        3072,
+        384
       ],
-      "id": "875aec30-795b-430a-bf1a-f566b3a5e96b",
-      "name": "Gemini2",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "SlmvhhNUiiM8jd8Q",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
+      "id": "c35c6890-65e9-44de-8be9-5818aa74b8b4",
+      "name": "HTTP Request1"
     },
     {
       "parameters": {
-        "promptType": "define",
-        "text": "   \n",
+        "operation": "toBinary",
+        "sourceProperty": "candidates[0].content.parts[1].inlineData.data",
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2.1,
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
       "position": [
-        1936,
-        768
+        3232,
+        384
       ],
-      "id": "20d62cf5-57af-47f6-a259-68a16e15220b",
-      "name": "Content Generator"
+      "id": "e4e1e868-ccba-465a-bf8b-1a3aa46ae4ba",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "name": "={{ $('Loop Over Items').item.json.theme }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3392,
+        384
+      ],
+      "id": "629d7b8f-dae7-454a-8c1c-dbae011b8243",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "LdvzY6Gd8oynVfeT",
+          "name": "Google Drive account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -482,17 +655,6 @@
         ]
       ]
     },
-    "Structured Output Parser": {
-      "ai_outputParser": [
-        [
-          {
-            "node": "Google Trend Search Query Generator",
-            "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Data  Collection": {
       "main": [
         [
@@ -538,7 +700,7 @@
       "main": [
         [
           {
-            "node": "Google_trends search",
+            "node": "Code1",
             "type": "main",
             "index": 0
           }
@@ -569,10 +731,134 @@
     },
     "Google_trends search": {
       "main": [
-        []
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Planner": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Google Trend Search Query Generator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Chat Memory Manager2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google_trends search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Chat Memory Manager",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Chat Memory Manager2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Memory Manager": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Chat Memory Manager",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Memory Manager2": {
+      "main": [
+        [
+          {
+            "node": "Planner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Planner",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
       "main": [
         [
           {
@@ -588,27 +874,44 @@
         [],
         [
           {
-            "node": "Content Generator",
+            "node": "HTTP Request1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Gemini2": {
-      "ai_languageModel": [
+    "HTTP Request1": {
+      "main": [
         [
           {
-            "node": "Content Generator",
-            "type": "ai_languageModel",
+            "node": "Convert to File",
+            "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Content Generator": {
+    "Convert to File": {
       "main": [
-        []
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -616,7 +919,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "66c93b9d-3611-4589-97b6-bba28b20149e",
+  "versionId": "c8c37678-938d-49c7-a044-fde1aba9452b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "413b6306fb1e0cadc81013b766a1d0334a1f2f01366ca3fde00bf02da66e32ce"
