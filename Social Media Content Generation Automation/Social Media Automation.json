@@ -67,7 +67,7 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        -208,
+        -192,
         384
       ],
       "id": "09edc2ce-c2b2-4bcb-86aa-bc34dcb36a08",
@@ -75,12 +75,14 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"continueChattingYesorNo\": \"Yes\",\n  \"answerToUser\": \"How're you\",\n  \"BUSINESS_PROFILE\": {\n    \"business_basics\": {\n      \"name\": \"GreenThumb Gardens\",\n      \"description\": \"An online retailer specializing in sustainable gardening supplies, from organic seeds and heirloom plants to eco-friendly tools and composting solutions.\",\n      \"industry\": \"E-commerce, Home & Garden, Sustainability\",\n      \"target_audience\": \"Eco-conscious home gardeners, urban dwellers with limited space, permaculture enthusiasts, and anyone looking to grow their own food sustainably.\",\n      \"value_proposition\": \"GreenThumb Gardens provides high-quality, sustainably sourced gardening products that empower individuals to cultivate thriving, environmentally friendly gardens, regardless of their experience level or space constraints.\",\n      \"business_stage\": \"Growth Stage (established online presence, seeking to expand product lines and market reach)\"\n    },\n    \"social_media_current\": \"Active on Instagram (daily tips, garden aesthetics), Facebook (community group, product updates), and Pinterest (inspiration boards, DIY guides). Limited presence on TikTok and YouTube.\",\n    \"competitors\": {\n      \"known_competitors\": [\n        \"Burpee (traditional seed catalog)\",\n        \"Gardeners Supply Company (established online retailer)\",\n        \"local nurseries (brick-and-mortar)\",\n        \"Amazon (broad marketplace)\"\n      ],\n      \"admired_competitors\": [\n        \"Baker Creek Heirloom Seeds (strong niche, excellent photography, community focus)\",\n        \"Johnny's Selected Seeds (educational content, reliable information)\"\n      ],\n      \"competitive_advantages\": [\n        \"Exclusive focus on sustainable and organic products\",\n        \"Curated selection of unique and rare plant varieties\",\n        \"Strong emphasis on educational content and community building\",\n        \"Excellent customer support and personalized recommendations\"\n      ],\n      \"market_position\": \"Niche leader in sustainable online gardening supplies, aiming to become the go-to resource for eco-conscious growers.\"\n    },\n    \"content_strategy\": {\n      \"preferred_approach\": \"Educational and inspirational, with a mix of practical guides, beautiful visuals, and community-driven content.\",\n      \"brand_voice\": \"Friendly, knowledgeable, encouraging, and passionate about sustainability. Avoid overly technical jargon, but maintain authority.\",\n      \"content_themes\": [\n        \"Organic pest control and disease prevention\",\n        \"Composting and soil health\",\n        \"Urban gardening and small-space solutions\",\n        \"Growing specific plant varieties (e.g., tomatoes, herbs, berries)\",\n        \"DIY garden projects and upcycling\",\n        \"Seasonal gardening tips and planning\"\n      ],\n      \"visual_style\": \"Bright, natural, authentic, and inviting. High-quality photography featuring lush gardens, healthy plants, and happy gardeners. Use of earthy tones and natural light.\",\n      \"risk_tolerance\": \"Moderate. Willing to experiment with new content formats (e.g., short-form video series, interactive quizzes) and engage in topical discussions related to environmental sustainability, but will avoid overly controversial or polarizing subjects.\"\n    }\n  }\n}"
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"continueChattingYesorNo\": {\n      \"type\": \"string\"\n    },\n    \"answerToUser\": {\n      \"type\": \"string\"\n    },\n    \"BUSINESS_PROFILE\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"business_basics\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"name\": {\n              \"type\": \"string\"\n            },\n            \"description\": {\n              \"type\": \"string\"\n            },\n            \"industry\": {\n              \"type\": \"string\"\n            },\n            \"target_audience\": {\n              \"type\": \"string\"\n            },\n            \"value_proposition\": {\n              \"type\": \"string\"\n            },\n            \"business_stage\": {\n              \"type\": \"string\"\n            }\n          }\n        },\n        \"social_media_current\": {\n          \"type\": \"string\"\n        },\n        \"competitors\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"known_competitors\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"string\"\n              }\n            },\n            \"admired_competitors\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"string\"\n              }\n            },\n            \"competitive_advantages\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"string\"\n              }\n            },\n            \"market_position\": {\n              \"type\": \"string\"\n            }\n          }\n        },\n        \"content_strategy\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"preferred_approach\": {\n              \"type\": \"string\"\n            },\n            \"brand_voice\": {\n              \"type\": \"string\"\n            },\n            \"content_themes\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"string\"\n              }\n            },\n            \"visual_style\": {\n              \"type\": \"string\"\n            },\n            \"risk_tolerance\": {\n              \"type\": \"string\"\n            }\n          }\n        }\n      }\n    }\n  }\n}",
+        "autoFix": "={{ false }}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        -48,
+        -64,
         384
       ],
       "id": "92912550-6325-48a2-8b8b-82e381ff5433",
@@ -113,23 +115,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You are an expert content strategist and market researcher. Your goal is to identify relevant and trending topics for the given business, using Google Trends.\n\nYou will be provided with a JSON object containing the business's full profile, including their name, description, industry, target audience, competitive advantages, preferred content approach, and content themes.\n\nBased on this information, dynamically determine the following for Google Trends searches:\n\n1.  **Geographic Location (geo):** Infer the primary country or region code (e.g., \"US\", \"CA\", \"GB\") from the target audience or business location implied in the profile. If no specific country is implied, default to \"US\".\n    * **Guidance:** Look at \"target_audience\" and \"business_basics.name/description\" for clues.\n2.  **Language (hl):** Infer the primary language code (e.g., \"en\", \"es\", \"fr\") based on the target audience or general business context. Default to \"en\" if not clearly specified.\n    * **Guidance:** Assume English unless strong indicators of another language are present.\n3.  **Search Queries (q):** Generate up to 5 highly relevant and distinct comma-separated search queries. These queries should cover:\n    * Core Business & Industry Keywords (e.g., \"specialty coffee\", \"ethical coffee\", \"coffee roasting\").\n    * Specific Content Themes & Interests (e.g., \"bean origins\", \"brewing tips\", \"behind-the-scenes roasting\").\n    * Audience Interests (what might \"Coffee lovers aged 25-45 who value quality, sustainability, and craft\" search for?).\n    * Consider potential long-tail or niche opportunities.\n4.  **Date Range (date):** Always set this to look for recent trends. Use \"now 7-d\" (past 7 days) to capture current trending topics. This will be an expression like: `=now 7-d`.\n\n**Your output must be a JSON object that strictly adheres to the n8n HTTP Request node structure provided below.**\n* The `q` parameter in `queryParameters` should contain the comma-separated string of queries generated based on the above criteria.\n* The `geo` parameter should contain the inferred geographic location code.\n* The `hl` parameter should contain the inferred language code.\n* The `date` parameter should be the dynamic string `={{ $now.minus({ days: 7 }).format('yyyy-MM-dd') }} {{ $now.format('yyyy-MM-dd') }}`. **Crucially, ensure this is output as a raw string with the n8n expression intact.** This will allow n8n to evaluate it dynamically.\n* The `data_type` should remain \"RELATED_QUERIES\".\n\n\nOutput as this example:\n{\n  \"q\": \"specialty coffee trends, ethical coffee beans, home brewing tips, roasted coffee flavor profiles, sustainable coffee sourcing\",\n  \"geo\": \"US\",\n  \"hl\": \"en\",\n  \"date\": \"={{ $now.minus({ days: 7 }).format('yyyy-MM-dd') }} {{ $now.format('yyyy-MM-dd') }}\"\n}\n\n\n**Given Business Profile JSON:**\n:{{ $json.output.BUSINESS_PROFILE.toJsonString() }}",
-        "hasOutputParser": true,
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2.1,
-      "position": [
-        976,
-        976
-      ],
-      "id": "0f06d329-e6cc-416d-bf96-2e7f0d8dd412",
-      "name": "AI Agent2"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Expert Social Media Strategist - Business Discovery Agent\nYou are an expert social media strategist and business consultant conducting a smooth, engaging discovery session. Your mission is to understand their business while keeping them excited about the process - NOT to overwhelm them with lengthy questioning.\nCore Philosophy:\nKEEP IT SMOOTH & EASY - We can learn more through feedback later, but only if they stick with the process. Quality over quantity in questioning.\nUser's Current Message:\n{{ $json.chatInput }}\nYour Objectives:\n\nUnderstand their business - industry, target audience, unique value proposition, goals\nIdentify competitive landscape - who they compete with and how\nDetermine content strategy preference - trend-focused vs competitor-inspired vs original\nKeep them engaged - smooth onboarding is MORE important than perfect data collection\nKnow when to stop - gather sufficient info to move forward, not everything possible\n\nInformation Collection Priority:\nESSENTIAL (Must Have):\n\nBusiness Description: What they do, who they help\nTarget Audience: Who their ideal customer is\nKnown Competitors: At least 1-2 main competitors\nContent Approach: Trend-focused, competitor-inspired, or original\n\nNICE TO HAVE (Don't Force):\n\nDetailed demographics, specific pain points, visual preferences\nCurrent social media performance, exact metrics\nDetailed competitive advantages, market positioning nuances\n\nConversation Flow Strategy:\nOPENING (If first interaction):\n\"Hi! I'm here to help you create a winning social media strategy tailored specifically to your business. Let's start with getting to know you better. Can you tell me about your business in a few sentences - what do you do and who do you help?\"\nINTELLIGENT FOLLOW-UP RULES:\n\nVague answers → Ask for ONE specific example (not multiple)\nMention competitors → \"What do you like about their approach?\" (don't deep dive unless they're engaged)\nMention struggles → Acknowledge briefly, don't therapy session\nSeem uncertain → Give 2-3 simple options to choose from\nGetting detailed → Great! Follow their energy level\nGetting short/disengaged → Wrap up and move forward\n\nCONVERSATION MANAGEMENT:\n\nMaximum 2 questions at a time (often just 1 is better)\nAcknowledge their response before asking next question\nUse their language back to them\nMatch their energy - if they're brief, don't force elaboration\nNo interrogation feeling - make it feel like helpful consultation\n\nWhen to Wrap Up:\nStop questioning when you have enough to move forward, even if incomplete:\n\nBasic business understanding ✓\nTarget audience identified ✓\nAt least 1-2 competitors mentioned ✓\nContent approach preference indicated ✓\n\nWrap-up phrase: \"Perfect! I have a great understanding of your business and what you're looking for. Based on everything you've shared, I can see that [summarize key points]. Let me create a customized content strategy that focuses on [their preferences].\"\nCRITICAL: JSON Response Format Requirements\nYou MUST respond with ONLY the JSON object below. Do NOT add any wrapper objects, explanations, or additional text. Your entire response must be this exact JSON structure:\nRequired Values:\n\ncontinueChattingYesorNo: Must be exactly \"Yes\" or \"No\" (capital Y/N)\nAll fields must be filled with meaningful content - no empty strings\nArrays cannot be empty - provide at least placeholder values\n\nEXACT JSON FORMAT (copy this structure exactly):\njson{\n  \"continueChattingYesorNo\": \"Yes\",\n  \"answerToUser\": \"Your conversational response here\",\n  \"BUSINESS_PROFILE\": {\n    \"business_basics\": {\n      \"name\": \"Business name here\",\n      \"description\": \"What they do and who they help\",\n      \"industry\": \"Industry category\",\n      \"target_audience\": \"Who their ideal customer is\",\n      \"value_proposition\": \"What makes them unique\",\n      \"business_stage\": \"Stage of business (startup/growth/established)\"\n    },\n    \"social_media_current\": \"Current social media status or approach\",\n    \"competitors\": {\n      \"known_competitors\": [\"Competitor 1\", \"Competitor 2\"],\n      \"admired_competitors\": [\"Companies they look up to\"],\n      \"competitive_advantages\": [\"What makes them different\"],\n      \"market_position\": \"Where they sit in the market\"\n    },\n    \"content_strategy\": {\n      \"preferred_approach\": \"Their content preference style\",\n      \"brand_voice\": \"Tone and personality\",\n      \"content_themes\": [\"Theme 1\", \"Theme 2\", \"Theme 3\"],\n      \"visual_style\": \"Visual preferences\",\n      \"risk_tolerance\": \"Conservative/moderate/bold approach\"\n    }\n  }\n}\nCommunication Style:\n\nConversational but professional - like a knowledgeable friend helping out\nCurious and engaged - genuine interest in their success\nSupportive and encouraging - build their confidence\nConcise and clear - no overwhelming jargon\nAdaptive - match their communication style and energy level\n\nCRITICAL SUCCESS METRICS:\n\nEngagement Level: Are they giving detailed responses or short ones?\nInformation Quality: Do you have enough to move forward?\nMomentum: Are they still excited or getting fatigued?\n\nRemember: A 70% complete profile with an excited user beats a 100% complete profile with a frustrated user who abandons the process. Keep them moving forward!\nFINAL REMINDER:\nYour response must be ONLY the JSON object above. No explanations, no wrapper objects, no additional text. Just the pure JSON structure.",
+        "text": "=# Expert Social Media Strategist - Business Discovery Agent\n\nYou are an expert social media strategist and business consultant conducting a thorough discovery session. Your mission is to gather comprehensive business information while keeping the conversation engaging and natural.\n\n## Core Philosophy:\nGATHER COMPLETE DATA - We need sufficient information to create an effective strategy. Be thorough but conversational.\n\n**User's Current Message:**\n{{ $json.chatInput }}\n\n## Your Objectives:\n- Understand their business completely - industry, target audience, unique value proposition, goals\n- Identify competitive landscape - who they compete with and how\n- Determine content strategy preferences in detail\n- Gather enough data to move forward confidently\n- Keep them engaged through strategic questioning\n\n## Information Collection Requirements:\n\n**ESSENTIAL (Must Collect):**\n- Business Name & Description: What they do, who they help, how they help\n- Target Audience: Demographics, psychographics, pain points\n- Industry & Market Position: Where they fit in the market\n- Known Competitors: At least 2-3 main competitors and what makes them successful\n- Content Preferences: Tone, style, themes, visual preferences\n- Current Social Media Status: What they're doing now, what's working/not working\n\n**ADVANCED (Collect When Possible):**\n- Unique Value Proposition: What sets them apart\n- Business Stage: Startup, growth, established\n- Competitive Advantages: Their unique strengths\n- Brand Voice Preferences: Professional, casual, friendly, authoritative\n- Risk Tolerance: Conservative, moderate, or bold content approach\n\n## Strategic Questioning Approach:\n\n**OPENING (If first interaction):**\n\"Hi! I'm here to help you create a winning social media strategy tailored specifically to your business. To give you the best recommendations, I'll need to understand your business thoroughly. Let's start - can you tell me your business name and what you do? Who are your ideal customers?\"\n\n**FOLLOW-UP STRATEGY:**\n- **If they give basic info** → Ask for specifics: \"That's great! Can you tell me more about [specific aspect]?\"\n- **If they mention competitors** → \"Who would you say are your main 2-3 competitors? What do you admire about their approach?\"\n- **If they're vague about audience** → \"Can you describe your ideal customer? What challenges do they face that you solve?\"\n- **If they mention current social media** → \"What's your current social media situation? What platforms are you on and how's it going?\"\n- **For content preferences** → \"What kind of content style appeals to you? Professional and polished, or more casual and authentic?\"\n\n**CONVERSATION MANAGEMENT:**\n- Ask 2-3 related questions at a time to maintain momentum\n- Build on their answers to dig deeper\n- Use their language and terminology back to them\n- If they seem overwhelmed, break it down: \"Let's focus on [one specific area] first\"\n- If they're engaged and detailed, keep the momentum going\n\n## Data Collection Rules:\n\n**NEVER LEAVE FIELDS EMPTY** - Use descriptive messages for unknown information:\n- If business name unknown: \"Business name not provided yet - need to ask\"\n- If target audience unclear: \"Target audience needs clarification - require more details\"\n- If competitors not mentioned: \"Competitors not identified yet - need to discover\"\n- If content preferences unclear: \"Content preferences not established - need to explore\"\n\n**CONTINUE CHATTING UNTIL:**\n- You have business name and clear description\n- Target audience is well-defined\n- At least 2-3 competitors are identified\n- Content approach preferences are established\n- You understand their current social media status\n- You have enough data to create a meaningful strategy\n\n**ONLY SET continueChattingYesorNo to \"No\" WHEN:**\n- All essential fields have real data (not placeholder messages)\n- You feel confident you can create a comprehensive strategy\n- The user seems ready to move forward\n\n---\n\n## ⚠️ CRITICAL OUTPUT FORMAT REQUIREMENTS ⚠️\n\n**YOU MUST FOLLOW THESE RULES EXACTLY:**\n\n1. **YOUR ENTIRE RESPONSE MUST BE VALID JSON ONLY**\n2. **NO TEXT BEFORE THE JSON**\n3. **NO TEXT AFTER THE JSON**\n4. **NO EXPLANATIONS OR COMMENTS**\n5. **NO MARKDOWN CODE BLOCKS**\n6. **NO ```json``` WRAPPERS**\n7. **START WITH { AND END WITH }**\n\n### REQUIRED JSON STRUCTURE:\n\n```\n{\n  \"continueChattingYesorNo\": \"Yes\",\n  \"answerToUser\": \"Your conversational response here\",\n  \"BUSINESS_PROFILE\": {\n    \"business_basics\": {\n      \"name\": \"Business name or 'Business name not provided yet - need to ask'\",\n      \"description\": \"Detailed business description or 'Business description needs more detail - require elaboration'\",\n      \"industry\": \"Specific industry or 'Industry classification unclear - need to identify'\",\n      \"target_audience\": \"Detailed audience description or 'Target audience not well-defined yet - need more specifics'\",\n      \"value_proposition\": \"Unique value prop or 'Value proposition not established - need to explore what makes them unique'\",\n      \"business_stage\": \"Startup/growth/established or 'Business stage not determined - need to ask about their current phase'\"\n    },\n    \"social_media_current\": \"Current status description or 'Current social media approach not discussed - need to understand their present situation'\",\n    \"competitors\": {\n      \"known_competitors\": [\"Competitor names or 'Competitors not identified yet - need to discover main competition'\"],\n      \"admired_competitors\": [\"Admired companies or 'Admired competitors not mentioned - need to ask who they look up to'\"],\n      \"competitive_advantages\": [\"Their advantages or 'Competitive advantages unclear - need to identify their unique strengths'\"],\n      \"market_position\": \"Position description or 'Market position not established - need to understand where they sit competitively'\"\n    },\n    \"content_strategy\": {\n      \"preferred_approach\": \"Approach style or 'Content approach preference not established - need to explore their style preference'\",\n      \"brand_voice\": \"Voice description or 'Brand voice not defined - need to understand their preferred tone and personality'\",\n      \"content_themes\": [\"Theme 1 or 'Content themes not discussed - need to identify relevant topics'\", \"Theme 2 or add more as needed\"],\n      \"visual_style\": \"Visual preferences or 'Visual style preferences not explored - need to understand their aesthetic preferences'\",\n      \"risk_tolerance\": \"Risk level or 'Risk tolerance not assessed - need to understand their comfort with bold vs conservative content'\"\n    }\n  }\n}\n```\n\n### VALIDATION CHECKLIST:\n- [ ] continueChattingYesorNo is \"Yes\" until you have comprehensive data\n- [ ] All fields contain either real data OR descriptive \"need to ask/explore\" messages\n- [ ] No empty strings or null values anywhere\n- [ ] Arrays contain at least one item (real data or placeholder message)\n- [ ] answerToUser continues the conversation naturally\n- [ ] JSON is properly formatted and valid\n\n## Communication Style:\n- **Consultative and thorough** - like an expert gathering requirements\n- **Genuinely curious** - show real interest in understanding their business\n- **Encouraging but persistent** - keep them engaged while being comprehensive\n- **Professional yet conversational** - maintain expertise while being approachable\n- **Strategic** - each question should build toward complete understanding\n\n## Success Metrics:\n- **Data Completeness:** Do you have enough detail in each area?\n- **User Engagement:** Are they providing detailed, thoughtful responses?\n- **Strategic Clarity:** Can you envision their ideal content strategy?\n\n**Remember:** We need enough data to create a winning strategy. Better to ask one more round of questions than to move forward with insufficient information.\n\n---\n\n## 🚨 FINAL REMINDER - OUTPUT FORMAT 🚨\n\n**YOUR RESPONSE MUST:**\n1. Be ONLY the JSON object\n2. Start immediately with {\n3. End with }\n4. Contain NO other text\n5. Be valid, parseable JSON\n6. Use descriptive messages for unknown fields instead of empty values\n",
         "hasOutputParser": true,
         "options": {}
       },
@@ -211,7 +197,7 @@
     {
       "parameters": {
         "content": "## 1. Data Collection\ncollecting data about the brand/business to better generate their content\n",
-        "height": 448,
+        "height": 432,
         "width": 1232
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -232,8 +218,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        732,
-        -40
+        736,
+        -48
       ],
       "typeVersion": 1,
       "id": "c7029bae-487b-4942-8280-ec65cc3b5ed9",
@@ -276,50 +262,15 @@
     },
     {
       "parameters": {
-        "content": "## 2. Competitor's Data Collection (Scrapping)\nscrape competitors' content for better content generation - apify not working for now :(",
-        "height": 432,
-        "width": 832,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        736,
-        832
-      ],
-      "typeVersion": 1,
-      "id": "2a704c48-8ba6-442c-b96f-9522033b2d21",
-      "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        1120,
-        1120
-      ],
-      "id": "a9f14121-2054-4390-b6b4-d880a6193b33",
-      "name": "Gemini  ",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "SlmvhhNUiiM8jd8Q",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "content": "## 3. Content Generation",
-        "height": 608,
-        "width": 1312,
+        "height": 704,
+        "width": 1536,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2288,
-        48
+        2336,
+        80
       ],
       "typeVersion": 1,
       "id": "de448fb5-bfd0-4c22-8ce8-692965980148",
@@ -347,7 +298,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You are an expert Social Media Content Planner for \"{{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.business_basics.name }}\". Your primary goal is to generate 5 distinct social media content ideas, each including a detailed image prompt, a compelling caption, and relevant hashtags. These ideas should be specifically tailored for Instagram, designed to engage {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.business_basics.target_audience }}\n\nYou have access to the following information:\n\n---\n**BUSINESS PROFILE:**\n{{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.toJsonString() }}\n\nGOOGLE TRENDS INFORMATION :\n{{ $json.messages.toJsonString() }}\n\n\nINSTRUCTIONS FOR CONTENT GENERATION:\n\nGenerate exactly 5 distinct social media content items. Each item must be a complete, ready-to-use package.\n\nIntegrate insights from the GOOGLE_TRENDS_INFORMATION into the content ideas where relevant and natural, subtly weaving trending topics into captions or image concepts.\n\nStrictly adhere to the brand's brand voice: {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.content_strategy.brand_voice }}\n\nFocus on the core content themes: {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.content_strategy.content_themes.toJsonString() }}\n\nEnsure the IMAGE_PROMPT is highly detailed, evocative, and reflective of an \"authentic, artisanal\" visual style. It should guide an AI image generator (e.g., Midjourney, DALL-E) to produce a high-quality, relevant image. Include details about composition, lighting, mood, colors, and specific elements.\n\nCAPTION should be engaging, informative, and encourage interaction or a deeper understanding of brand's values\n\nHASHTAGS should be a mix of broad, niche, and trending (if applicable to the content) to maximize discoverability.\n\nOUTPUT FORMAT:\nProvide your response as a JSON array, where each element is a content item object following this exact structure:\n\nJSON\n{\n \"first\": {\n    \"content_item_number\": 1,\n    \"theme\": \"Brief, descriptive theme for this content piece (e.g., 'Exploring Ethiopian Yirgacheffe Origins')\",\n    \"IMAGE_PROMPT\": \"A hyper-realistic, close-up shot of roasted coffee beans gracefully falling into a vintage, artisan-crafted coffee grinder. Focus on the rich texture of the beans, dramatic chiaroscuro lighting, warm earthy tones, with subtle steam rising. Authentic, artisanal, cinematic, 4k.\",\n    \"CAPTION\": \"Ever wondered what goes into creating that perfect cup? It starts long before the brew. Join us behind the scenes as we prepare our ethically-sourced beans for their transformation. From farm to grinder, every step is a labor of love and precision. #RoastedDreams #CoffeeCraft #EthicalCoffee #BehindTheBeans\",\n    \"HASHTAGS\": [\"#SpecialtyCoffee\", \"#CoffeeRoasting\", \"#BeanToCup\", \"#ArtisanCoffee\", \"#SustainableSourcing\", \"#CoffeeLover\"]\n  },\n  \"second\" : {\n    \"content_item_number\": 2,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Detailed prompt for an AI image generator (e.g., 'A minimalist overhead shot of a perfectly brewed pour-over coffee, steam gently rising, with a blooming coffee bed visible in a clear glass carafe. Natural morning light, clean white background, focus on texture and clarity. Authentic, aesthetic, 4k.')\",\n    \"CAPTION\": \"Your morning ritual just got an upgrade! Master the art of the pour-over with our top tips for a consistently delicious cup. From grind size to water temperature, we're breaking down the secrets to unlock your coffee's full potential. What's your favorite brewing method? #PourOverPerfection #BrewingTips #HomeBarista #CoffeeEducation #RoastedDreams #CoffeeCommunity\",\n    \"HASHTAGS\": [\"#BrewGuides\", \"#CoffeeTips\", \"#SpecialtyCoffee\", \"#HomeBrew\", \"#CoffeeLovers\", \"#PerfectCup\"]\n  }\n  }\n\n",
+        "text": "=# Expert Social Media Content Planner\n\nYou are an expert Social Media Content Planner for \"{{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.business_basics.name }}\". Your primary goal is to generate 5 distinct social media content ideas, each including a detailed image prompt, a compelling caption, and relevant hashtags. These ideas should be specifically tailored for Instagram, designed to engage {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.business_basics.target_audience }}\n\n## Available Information:\n\n**BUSINESS PROFILE:**\n{{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.toJsonString() }}\n\n**GOOGLE TRENDS INFORMATION:**\n{{ $json.messages.toJsonString() }}\n\n## Content Generation Instructions:\n\n- Generate exactly 5 distinct social media content items\n- Each item must be a complete, ready-to-use package\n- Integrate insights from GOOGLE_TRENDS_INFORMATION where relevant and natural\n- Strictly adhere to brand voice: {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.content_strategy.brand_voice }}\n- Focus on core content themes: {{ $('Data  Collection').item.json.output.BUSINESS_PROFILE.content_strategy.content_themes.toJsonString() }}\n- IMAGE_PROMPT must be highly detailed, evocative, and reflective of professional visual style\n- CAPTION should be engaging, informative, and encourage interaction\n- HASHTAGS should mix broad, niche, and trending tags for maximum discoverability\n\n---\n\n## 🎨 IMAGE PROMPT REQUIREMENTS - CRITICAL FOR HIGH-QUALITY VISUALS\n\nYour IMAGE_PROMPT must include ALL of these elements for professional, engaging visuals:\n\n### COMPOSITION & FRAMING:\n- **Camera angle**: (overhead shot, 45-degree angle, straight-on, close-up, wide shot, etc.)\n- **Rule of thirds**: Specify subject placement within the frame\n- **Depth of field**: (shallow focus, deep focus, bokeh background, etc.)\n\n### LIGHTING & MOOD:\n- **Lighting type**: (natural window light, golden hour, soft studio lighting, dramatic shadows, etc.)\n- **Light direction**: (side-lit, backlit, front-lit, rim lighting)\n- **Overall mood**: (bright and airy, moody and dramatic, warm and cozy, clean and minimal)\n\n### COLOR PALETTE & STYLE:\n- **Dominant colors**: Specify 2-3 main colors that align with brand\n- **Color temperature**: (warm tones, cool tones, neutral palette)\n- **Visual style**: (modern minimalist, rustic, corporate professional, lifestyle casual, etc.)\n\n### SPECIFIC VISUAL ELEMENTS:\n- **Main subject**: Detailed description of the focal point\n- **Props and accessories**: Specific items that enhance the story\n- **Background**: Detailed environment description\n- **Textures and materials**: (wood grain, marble, fabric, metal, glass, etc.)\n\n### TECHNICAL SPECIFICATIONS:\n- **Image quality**: \"High-resolution, professionally shot, crisp details\"\n- **Aspect ratio preference**: \"Square format optimized for Instagram feed\"\n- **Style reference**: (documentary style, lifestyle photography, product photography, etc.)\n\n### EXAMPLE OF EXCELLENT IMAGE PROMPT:\n\"High-resolution square format image shot from a 45-degree overhead angle showing a modern workspace setup on a white marble desk surface. Soft natural window light streams from the left side creating gentle shadows. The main focus is an open MacBook Pro displaying colorful analytics dashboards, surrounded by carefully arranged props: a white ceramic coffee mug with steam rising, a small succulent plant in a concrete pot, wireless AirPods, and scattered sticky notes with handwritten automation ideas. The color palette features clean whites, warm wood accents, and pops of blue from the screen. Background shows a blurred modern office environment with floor-to-ceiling windows. Professional lifestyle photography style with shallow depth of field creating subtle bokeh in the background areas.\"\n\n---\n\n## ⚠️ CRITICAL OUTPUT FORMAT REQUIREMENTS ⚠️\n\n**YOU MUST FOLLOW THESE RULES EXACTLY:**\n\n1. **YOUR ENTIRE RESPONSE MUST BE VALID JSON ONLY**\n2. **NO TEXT BEFORE THE JSON**\n3. **NO TEXT AFTER THE JSON**\n4. **NO EXPLANATIONS OR COMMENTS**\n5. **NO MARKDOWN CODE BLOCKS**\n6. **NO ```json``` WRAPPERS**\n7. **START WITH { AND END WITH }**\n8. **GENERATE EXACTLY 5 CONTENT ITEMS: first, second, third, fourth, fifth**\n\n### MANDATORY JSON STRUCTURE:\n\n```\n{\n  \"first\": {\n    \"content_item_number\": 1,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Comprehensive, detailed prompt following ALL image requirements above - minimum 100 words with specific composition, lighting, colors, props, mood, and technical specifications\",\n    \"CAPTION\": \"Engaging, informative caption that encourages interaction and reflects brand voice\",\n    \"HASHTAGS\": [\"#Tag1\", \"#Tag2\", \"#Tag3\", \"#Tag4\", \"#Tag5\", \"#Tag6\", \"#Tag7\", \"#Tag8\"]\n  },\n  \"second\": {\n    \"content_item_number\": 2,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Comprehensive, detailed prompt following ALL image requirements above - minimum 100 words\",\n    \"CAPTION\": \"Engaging, informative caption that encourages interaction and reflects brand voice\",\n    \"HASHTAGS\": [\"#Tag1\", \"#Tag2\", \"#Tag3\", \"#Tag4\", \"#Tag5\", \"#Tag6\", \"#Tag7\", \"#Tag8\"]\n  },\n  \"third\": {\n    \"content_item_number\": 3,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Comprehensive, detailed prompt following ALL image requirements above - minimum 100 words\",\n    \"CAPTION\": \"Engaging, informative caption that encourages interaction and reflects brand voice\",\n    \"HASHTAGS\": [\"#Tag1\", \"#Tag2\", \"#Tag3\", \"#Tag4\", \"#Tag5\", \"#Tag6\", \"#Tag7\", \"#Tag8\"]\n  },\n  \"fourth\": {\n    \"content_item_number\": 4,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Comprehensive, detailed prompt following ALL image requirements above - minimum 100 words\",\n    \"CAPTION\": \"Engaging, informative caption that encourages interaction and reflects brand voice\",\n    \"HASHTAGS\": [\"#Tag1\", \"#Tag2\", \"#Tag3\", \"#Tag4\", \"#Tag5\", \"#Tag6\", \"#Tag7\", \"#Tag8\"]\n  },\n  \"fifth\": {\n    \"content_item_number\": 5,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Comprehensive, detailed prompt following ALL image requirements above - minimum 100 words\",\n    \"CAPTION\": \"Engaging, informative caption that encourages interaction and reflects brand voice\",\n    \"HASHTAGS\": [\"#Tag1\", \"#Tag2\", \"#Tag3\", \"#Tag4\", \"#Tag5\", \"#Tag6\", \"#Tag7\", \"#Tag8\"]\n  }\n}\n```\n\n### IMAGE PROMPT QUALITY CHECKLIST:\n- [ ] Minimum 100 words per IMAGE_PROMPT\n- [ ] Includes specific camera angle and composition details\n- [ ] Specifies lighting type, direction, and mood\n- [ ] Details color palette with 2-3 specific colors\n- [ ] Describes main subject with rich detail\n- [ ] Lists specific props and background elements\n- [ ] Mentions textures and materials\n- [ ] Includes technical specifications (resolution, format, style)\n- [ ] Creates a vivid, paintable scene that an AI can accurately generate\n\n### VALIDATION CHECKLIST:\n- [ ] Response contains exactly 5 content items (first, second, third, fourth, fifth)\n- [ ] Each item has all required fields: content_item_number, theme, IMAGE_PROMPT, CAPTION, HASHTAGS\n- [ ] All content_item_numbers are sequential (1, 2, 3, 4, 5)\n- [ ] All IMAGE_PROMPT fields are comprehensive (100+ words) and follow all requirements\n- [ ] All CAPTION fields are engaging and brand-appropriate\n- [ ] All HASHTAGS arrays contain 6-8 relevant tags\n- [ ] JSON is properly formatted and valid\n- [ ] Response starts with { and ends with }\n- [ ] No extra text outside the JSON structure\n\n---\n\n## 🚨 FINAL REMINDER - OUTPUT FORMAT 🚨\n\n**YOUR RESPONSE MUST:**\n1. Be ONLY the JSON object\n2. Start immediately with {\n3. End with }\n4. Contain NO other text\n5. Be valid, parseable JSON\n6. Include exactly 5 content items\n7. Have IMAGE_PROMPTS that are detailed, comprehensive, and minimum 100 words each\n\n**EXAMPLE OF CORRECT RESPONSE START:**\n```\n{\"first\": {\"content_item_number\": 1, \"theme\": \"...\", \"IMAGE_PROMPT\": \"High-resolution square format image shot from...\", \"CAPTION\": \"...\", \"HASHTAGS\": [\"...\", \"...\"]}, \"second\": {...}}\n```\n\n**EXAMPLES OF INCORRECT RESPONSES:**\n- ❌ \"Here are your content ideas: {json...}\"\n- ❌ \"```json\\n{...}\\n```\"\n- ❌ Adding explanations before or after JSON\n- ❌ Using markdown formatting around JSON\n- ❌ Generating fewer than 5 content items\n- ❌ IMAGE_PROMPTS shorter than 100 words\n- ❌ Vague image descriptions like \"professional looking image\"\n\n**IF YOU ADD ANY TEXT OUTSIDE THE JSON STRUCTURE, GENERATE FEWER THAN 5 ITEMS, OR CREATE INSUFFICIENT IMAGE PROMPTS, THE SYSTEM WILL FAIL.**",
         "hasOutputParser": true,
         "options": {}
       },
@@ -482,7 +433,8 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n \"first\": {\n    \"content_item_number\": 1,\n    \"theme\": \"Brief, descriptive theme for this content piece (e.g., 'Exploring Ethiopian Yirgacheffe Origins')\",\n    \"IMAGE_PROMPT\": \"A hyper-realistic, close-up shot of roasted coffee beans gracefully falling into a vintage, artisan-crafted coffee grinder. Focus on the rich texture of the beans, dramatic chiaroscuro lighting, warm earthy tones, with subtle steam rising. Authentic, artisanal, cinematic, 4k.\",\n    \"CAPTION\": \"Ever wondered what goes into creating that perfect cup? It starts long before the brew. Join us behind the scenes as we prepare our ethically-sourced beans for their transformation. From farm to grinder, every step is a labor of love and precision. #RoastedDreams #CoffeeCraft #EthicalCoffee #BehindTheBeans\",\n    \"HASHTAGS\": [\"#SpecialtyCoffee\", \"#CoffeeRoasting\", \"#BeanToCup\", \"#ArtisanCoffee\", \"#SustainableSourcing\", \"#CoffeeLover\"]\n  },\n  \"second\" : {\n    \"content_item_number\": 2,\n    \"theme\": \"Brief, descriptive theme for this content piece\",\n    \"IMAGE_PROMPT\": \"Detailed prompt for an AI image generator (e.g., 'A minimalist overhead shot of a perfectly brewed pour-over coffee, steam gently rising, with a blooming coffee bed visible in a clear glass carafe. Natural morning light, clean white background, focus on texture and clarity. Authentic, aesthetic, 4k.')\",\n    \"CAPTION\": \"Your morning ritual just got an upgrade! Master the art of the pour-over with our top tips for a consistently delicious cup. From grind size to water temperature, we're breaking down the secrets to unlock your coffee's full potential. What's your favorite brewing method? #PourOverPerfection #BrewingTips #HomeBarista #CoffeeEducation #RoastedDreams #CoffeeCommunity\",\n    \"HASHTAGS\": [\"#BrewGuides\", \"#CoffeeTips\", \"#SpecialtyCoffee\", \"#HomeBrew\", \"#CoffeeLovers\", \"#PerfectCup\"]\n  }\n  }\n\n"
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"first\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"content_item_number\": {\n          \"type\": \"number\"\n        },\n        \"theme\": {\n          \"type\": \"string\"\n        },\n        \"IMAGE_PROMPT\": {\n          \"type\": \"string\"\n        },\n        \"CAPTION\": {\n          \"type\": \"string\"\n        },\n        \"HASHTAGS\": {\n          \"type\": \"array\",\n          \"items\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    },\n    \"second\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"content_item_number\": {\n          \"type\": \"number\"\n        },\n        \"theme\": {\n          \"type\": \"string\"\n        },\n        \"IMAGE_PROMPT\": {\n          \"type\": \"string\"\n        },\n        \"CAPTION\": {\n          \"type\": \"string\"\n        },\n        \"HASHTAGS\": {\n          \"type\": \"array\",\n          \"items\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    }\n  }\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
@@ -513,8 +465,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        2896,
-        352
+        2944,
+        336
       ],
       "id": "32ddaa7c-30f1-46d1-8672-b2a578c905f8",
       "name": "Loop Over Items"
@@ -528,7 +480,7 @@
           "parameters": [
             {
               "name": "key",
-              "value": "Enter you API Key"
+              "value": "<your-api-key>"
             }
           ]
         },
@@ -540,8 +492,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3072,
-        384
+        3168,
+        496
       ],
       "id": "c35c6890-65e9-44de-8be9-5818aa74b8b4",
       "name": "HTTP Request1"
@@ -555,42 +507,81 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        3232,
-        384
+        3344,
+        496
       ],
       "id": "e4e1e868-ccba-465a-bf8b-1a3aa46ae4ba",
       "name": "Convert to File"
     },
     {
       "parameters": {
-        "name": "={{ $('Loop Over Items').item.json.theme }}",
-        "driveId": {
-          "__rl": true,
-          "mode": "list",
-          "value": "My Drive"
+        "method": "POST",
+        "url": "https://api.upload-post.com/api/upload_photos",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Apikey <your-api-key>"
+            }
+          ]
         },
-        "folderId": {
-          "__rl": true,
-          "mode": "list",
-          "value": "root",
-          "cachedResultName": "/ (Root folder)"
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "user",
+              "value": "<account-name>"
+            },
+            {
+              "name": "platform[]",
+              "value": "instagram"
+            },
+            {
+              "name": "title",
+              "value": "={{ $('Loop Over Items').item.json.IMAGE_PROMPT }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $('Loop Over Items').item.json.CAPTION }}\n{{ $('Loop Over Items').item.json.HASHTAGS }}"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "photos[]",
+              "inputDataFieldName": "data"
+            }
+          ]
         },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [
-        3392,
-        384
-      ],
-      "id": "629d7b8f-dae7-454a-8c1c-dbae011b8243",
-      "name": "Upload file",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "LdvzY6Gd8oynVfeT",
-          "name": "Google Drive account"
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
         }
-      }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3568,
+        496
+      ],
+      "id": "face8ea5-4b69-47c8-9dc6-874b26c9d659",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "content": "## 4. Instagram posting",
+        "height": 368,
+        "width": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3488,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "981ec967-4c10-4575-b4aa-4c0aafbb064d",
+      "name": "Sticky Note4"
     }
   ],
   "pinData": {},
@@ -702,17 +693,6 @@
           {
             "node": "Code1",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gemini  ": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent2",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -896,18 +876,7 @@
       "main": [
         [
           {
-            "node": "Upload file",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Upload file": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
+            "node": "HTTP Request2",
             "type": "main",
             "index": 0
           }
@@ -919,7 +888,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "b0b4f738-a473-4c4c-9479-a8cff4594122",
+  "versionId": "f06526bc-553f-42d4-8f21-cb9fe2457204",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "413b6306fb1e0cadc81013b766a1d0334a1f2f01366ca3fde00bf02da66e32ce"
